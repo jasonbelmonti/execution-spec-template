@@ -1,0 +1,317 @@
+# Execution Specification Review Process
+
+Author-facing drafting guidance lives in `docs/execution-spec-authoring-guide.md`. This document is the reviewer and decision-owner procedure.
+
+## Purpose
+
+This process shall determine five things in order:
+
+1. Is the selected execution level correct?
+2. Is the execution source authority sufficient?
+3. Is the plan structurally complete for that level?
+4. Is the execution sequence operationally viable?
+5. What approval decision, if any, is justified?
+
+Review the artifact from authority to evidence. Do not spend most of the review on task mechanics if scope, ownership, validation, or rollback are weak.
+
+## Review Outputs
+
+Every review shall produce:
+
+- An execution-level decision
+- A source authority decision
+- A section-by-section status ledger
+- A finding log with severity, status, owner, and required action
+- A traceability result
+- A final verdict
+
+## Review Roles
+
+| Role | Responsibility |
+| --- | --- |
+| Author | Writes the execution spec, resolves findings, maintains traceability |
+| Executor | Performs or coordinates the work packages |
+| Moderator | Runs review order and prevents skipping source authority or validation |
+| Domain reviewer | Challenges correctness, risk controls, and missing validation in a specific area |
+| Decision owner | Approves, rejects, or requests rework |
+
+For `E3` reviews, include at least one reviewer independent of the primary executor for the critical domain involved.
+
+## Section Status Vocabulary
+
+Use the same statuses as the template:
+
+| Status | Review meaning |
+| --- | --- |
+| `Complete` | Required content exists and exit criteria are met |
+| `Deferred` | Gap is explicit, bounded, owned, linked to one or more `Q-*` items, backed by a validation or resolution plan, and acceptable for the chosen execution level |
+| `N/A` | Section truly does not apply; rationale is credible |
+| `Incomplete` | Content or exit criteria are missing; approval cannot proceed |
+
+## Severity Vocabulary
+
+| Severity | Meaning |
+| --- | --- |
+| `Blocker` | If status is `Open`, approval shall not proceed |
+| `Major` | Important weakness; review may continue, but approval shall not proceed while status is `Open` |
+| `Minor` | Useful improvement; does not materially undermine execution |
+| `Observation` | Reviewer note with no immediate action required |
+
+## Finding Status Vocabulary
+
+| Status | Meaning |
+| --- | --- |
+| `Open` | Finding remains unresolved and shall affect the verdict according to severity |
+| `Resolved` | Required action completed and reviewer verified the result |
+| `Waived by WVR-*` | Finding is covered by an approved review waiver that this process permits |
+| `Closed` | No further action required because the item is informational or intentionally non-blocking; use only for `Minor` or `Observation` findings |
+
+## Waiver Rules
+
+Waivers are review-control exceptions, not execution-plan deviations. Record execution-plan departures as `DEV-*`; record review or approval exceptions as `WVR-*`.
+
+A `WVR-*` waiver shall include the waived rule or finding, approver, rationale, boundary or expiry, compensating control, and evidence. The decision owner shall approve every waiver. For `E3`, the critical-domain reviewer shall also approve the waiver.
+
+These findings are not waivable:
+
+- Incorrect execution level.
+- Missing or insufficient source authority.
+- Any plan that asks executors to resolve product, design, security, or operational authority gaps locally.
+- Missing validation for the highest-risk claim.
+- Missing rollback or containment for work that affects live systems.
+- Broken traceability for a critical objective, work package, or high-risk surface.
+
+All other `Blocker` or `Major` findings may be waived only when the process or template permits `Deferred` treatment, the gap is bounded, the compensating control is explicit, and the final verdict records the `WVR-*` identifier.
+
+## Stage 0: Execution Level Calibration
+
+Before reviewing the plan itself, verify that the selected execution level matches the operational risk.
+
+### Calibration Questions
+
+- Is the document asking for investigation approval or execution approval?
+- If labeled `E1`, are all bounded-change eligibility conditions true?
+- Could execution failure cause safety, security, compliance, financial, or irreversible data impact?
+- Does the change touch a shared platform, high-volume path, or high-blast-radius dependency?
+- Is rollback constrained, manual, expensive, or impossible?
+- Does the plan depend on coordinated releases across multiple owners?
+
+### Calibration Rules
+
+- If the work is exploratory and intended to answer uncertainty, `E0` may be correct.
+- If the work is small, reversible, owned by one party, and has bounded operational risk, `E1` may be correct.
+- If the work is intended for production or durable internal use and does not qualify for `E1` or trigger `E3`, default to `E2`.
+- If any `E3` trigger from the template applies, review as `E3`.
+
+### Calibration Blocking Conditions
+
+Stop the review and return the document if any of the following are true:
+
+- The document is labeled `E0` but asks for shipping or production approval.
+- The document is labeled below the true operational risk.
+- The document is labeled `E1` while any bounded-change eligibility condition is false or unclear.
+- The document asks executors to resolve product, design, security, or operational authority gaps locally.
+
+### Calibration Output
+
+| Field | Value |
+| --- | --- |
+| Proposed execution level |  |
+| Reviewed execution level |  |
+| Calibration result | Accept / Raise / Lower |
+| Rationale |  |
+
+## Stage 1: Source Authority and Structural Review
+
+Structural review asks whether the plan is executable and reviewable.
+
+Evaluate every section against five quality dimensions:
+
+- `Presence`
+- `Precision`
+- `Authority`
+- `Traceability`
+- `Execution utility`
+
+### Source Authority Output
+
+| Field | Value |
+| --- | --- |
+| Source authority result | Accept / Insufficient |
+| Rationale |  |
+
+### Section Review Ledger
+
+| Section | Reviewer question | Status | Findings |
+| --- | --- | --- | --- |
+| 0. Execution Summary | Can I state the requested execution decision and entry condition? |  |  |
+| 1. Source Authority and Scope | Is the authority for the work explicit and sufficient? |  |  |
+| 2. Objectives and Non-Objectives | Do outcomes and exclusions bound the work? |  |  |
+| 3. Ownership, Roles, and Decision Points | Are owners, reviewers, and escalation paths explicit? |  |  |
+| 4. Constraints, Assumptions, and Dependencies | Are blockers and assumptions visible and managed? |  |  |
+| 5. Change Surface Inventory | Are all touched systems and review surfaces identified? |  |  |
+| 6. Work Packages and Sequencing | Can the work be executed in the stated order? |  |  |
+| 7. Execution Controls and Drift Management | Will the team detect unsafe scope or design drift? |  |  |
+| 8. Data, Schema, Config, and Contract Handling | Are compatibility and reversibility impacts explicit? |  |  |
+| 9. Validation and Evidence Plan | Does validation prove completion and risky claims? |  |  |
+| 10. Review Plan | Are required reviewers and approval conditions explicit? |  |  |
+| 11. Rollout, Migration, Rollback, and Recovery | Can the change be deployed and recovered safely? |  |  |
+| 12. Observability and Operational Readiness | Can operators detect and respond to failure? |  |  |
+| 13. Risks, Questions, Deviations, and Waivers | Are risks, unknowns, deviations, and waivers honestly represented? |  |  |
+| 14. Execution Traceability Matrix | Is the chain from source to evidence intact? |  |  |
+| 15. Final Execution Gate | Are entry, completion, release, and handoff gates evidence-based? |  |  |
+
+### Structural Blocking Conditions
+
+Stop the review if any of the following are true:
+
+- Any required section is `Incomplete`.
+- Source authority is absent or insufficient.
+- Work packages do not cover the stated objectives.
+- Writable change surfaces lack owners or review expectations.
+- Validation does not cover the highest-risk claim.
+- Rollout or rollback is absent for work that can affect live systems.
+- A blocking dependency is missing from the final gate.
+- The traceability chain from source to evidence is visibly broken.
+
+### Structural Output
+
+| Finding ID | Severity | Status | Section | Finding | Required action | Owner |
+| --- | --- | --- | --- | --- | --- | --- |
+| ST-1 | Blocker / Major / Minor / Observation | Open / Resolved / Waived by WVR-* / Closed |  |  |  |  |
+
+If any blocker has status `Open`, do not proceed to execution viability review. Go directly to Stage 4 and issue a verdict based on the completed stages.
+
+## Stage 2: Execution Viability Review
+
+Execution viability asks whether the plan would complete safely if followed exactly as written.
+
+### Viability Dimensions
+
+Score each dimension from `0` to `3`:
+
+- `0`: absent or invalid
+- `1`: weak; major doubt remains
+- `2`: adequate; review can proceed with follow-up
+- `3`: strong; well-supported and internally consistent
+
+| Dimension | Review question |
+| --- | --- |
+| Authority fitness | Is the source decision sufficient for execution? |
+| Scope control | Are inclusions, exclusions, and escalation rules clear? |
+| Sequence adequacy | Are work packages ordered and integrated safely? |
+| Surface coverage | Are all changed systems, files, data, configs, and contracts represented? |
+| Validation adequacy | Does evidence prove the outcome and risky claims? |
+| Review adequacy | Are the right reviewers assigned to the right surfaces? |
+| Operational safety | Are rollout, rollback, recovery, and observability credible? |
+
+### Viability Blocking Conditions
+
+Return the document for rework if any of the following are true:
+
+- Executors would need to make unapproved design, product, or operational decisions.
+- The sequence creates avoidable integration or deployment hazards.
+- Critical surfaces are omitted from review or validation.
+- The validation plan could pass while the approved outcome remains unmet.
+- The rollback or recovery plan is unsafe for the execution level.
+
+### Minimum Acceptable Scores by Execution Level
+
+| Execution level | Minimum acceptable posture |
+| --- | --- |
+| `E0` | No dimension may score `0`; `Authority fitness`, `Scope control`, and `Validation adequacy` shall score at least `2` |
+| `E1` | No dimension may score `0`; `Authority fitness`, `Sequence adequacy`, `Validation adequacy`, and `Review adequacy` shall score at least `2` |
+| `E2` | No dimension may score `0`; all dimensions shall score at least `2` |
+| `E3` | No dimension may score below `2`; `Validation adequacy`, `Review adequacy`, and `Operational safety` should normally score `3` |
+
+### Viability Output
+
+| Finding ID | Severity | Status | Dimension | Finding | Evidence | Required action | Owner |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| EX-1 | Blocker / Major / Minor / Observation | Open / Resolved / Waived by WVR-* / Closed |  |  |  |  |  |
+
+| Dimension | Score | Notes |
+| --- | --- | --- |
+| Authority fitness |  |  |
+| Scope control |  |  |
+| Sequence adequacy |  |  |
+| Surface coverage |  |  |
+| Validation adequacy |  |  |
+| Review adequacy |  |  |
+| Operational safety |  |  |
+
+## Stage 3: Traceability Audit
+
+Traceability review confirms that the plan forms an unbroken execution chain.
+
+### Audit Questions
+
+- Does every `SRC-*` map to at least one `OBJ-*` or `WP-*`?
+- Does every `OBJ-*` map to one or more `WP-*` rows?
+- Does every writable `SURF-*` map to one or more `WP-*`, `REV-*`, and `VAL-*` rows?
+- Does every `WP-*` have validation evidence?
+- Does every high-risk `RISK-*` map to a control, validation item, release action, or observability signal?
+- Does every blocking dependency appear in the final execution gate?
+
+### Traceability Blocking Conditions
+
+Return the document for rework if:
+
+- Any objective has no work package.
+- Any work package has no validation path.
+- Any high-risk surface lacks review coverage.
+- Any release action lacks rollback, containment, or `N/A` rationale.
+- The chain from source authority to completion evidence cannot be followed by an independent reviewer.
+
+### Traceability Output
+
+| Finding ID | Severity | Status | Gap | Required action | Owner |
+| --- | --- | --- | --- | --- | --- |
+| TR-1 | Blocker / Major / Minor / Observation | Open / Resolved / Waived by WVR-* / Closed |  |  |  |
+
+## Stage 4: Decision and Conditions
+
+Make one base verdict after the last completed review stage.
+
+If calibration, structural, viability, or traceability review stops the process early, skip the remaining stages and issue `Rework required` or `Reject` based on the evidence gathered so far.
+
+Approval verdicts require every `Blocker` or `Major` finding to be `Resolved` or explicitly `Waived by WVR-*` where this standard permits a waiver. Conditions do not convert a `Major` finding into an approval.
+
+Valid verdicts:
+
+- `Approve to investigate`
+- `Approve to execute`
+- `Approve with heightened controls`
+- `Rework required`
+- `Reject`
+
+### Conditions Format
+
+| Condition ID | Applies to | Required action | Owner | Due |
+| --- | --- | --- | --- | --- |
+| COND-1 |  |  |  |  |
+
+### Heightened Controls Format
+
+| Control ID | Control | Owner | Evidence required |
+| --- | --- | --- | --- |
+| HC-1 |  |  |  |
+
+## Review Record Template
+
+| Field | Value |
+| --- | --- |
+| Reviewed artifact |  |
+| Review date |  |
+| Proposed execution level |  |
+| Reviewed execution level |  |
+| Calibration result |  |
+| Source authority result |  |
+| Structural result |  |
+| Viability result |  |
+| Traceability result |  |
+| Final verdict |  |
+
+## Operating Rule
+
+Do not approve execution because the task sounds small. Approve only when source authority, scope control, sequencing, validation, review, and recovery are strong enough for the selected execution level.
