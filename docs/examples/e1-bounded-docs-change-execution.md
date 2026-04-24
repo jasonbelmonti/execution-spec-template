@@ -146,9 +146,9 @@ Section status: N/A
 
 | ID | Method | Claim verified | Timing | Owner | Evidence artifact |
 | --- | --- | --- | --- | --- | --- |
-| VAL-1 | Inspection | Four intended Markdown files exist. | Pre-completion | Codex | EVD-1 file listing |
-| VAL-2 | Inspection | Headings are coherent and reviewable. | Pre-completion | Codex | EVD-2 heading listing |
-| VAL-3 | Inspection | Git status shows documentation-only changes. | Pre-completion | Codex | EVD-3 Git status |
+| VAL-1 | Inspection | Four intended Markdown files exist. | Pre-merge | Codex | EVD-1 file listing |
+| VAL-2 | Inspection | Headings are coherent and reviewable. | Pre-merge | Codex | EVD-2 heading listing |
+| VAL-3 | Inspection | Git status shows documentation-only changes. | Pre-merge | Codex | EVD-3 Git status |
 
 Section status: Complete
 
@@ -158,7 +158,7 @@ Section status: Complete
 | --- | --- | --- | --- | --- |
 | REV-1 | Repository owner | Directional fit, section model, execution level vocabulary, and whether to add skill packaging next. | Yes | Owner feedback or approval. |
 
-Approval conditions: The first draft is acceptable when the repository owner agrees the structure is directionally correct or gives bounded revision instructions.
+Approval conditions: The first draft is acceptable when the repository owner agrees the structure is directionally correct. Bounded revision instructions require rework before approval.
 
 Section status: Complete
 
