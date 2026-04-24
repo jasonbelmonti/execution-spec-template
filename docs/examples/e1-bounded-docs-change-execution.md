@@ -14,7 +14,7 @@
 | Decision owner | Repository owner |
 | Target branch, release, or milestone | `codex/execution-template-first-draft` |
 | Last updated | 2026-04-24 |
-| Related source docs | `design-spec-template` docs and `origin/main` skill packaging layout |
+| Related source docs | `design-spec-template` docs |
 | Related tickets | User request in Codex thread |
 
 ## 0. Execution Summary
@@ -215,7 +215,7 @@ Section status: Complete
 
 ## 15. Final Execution Gate
 
-Entry gate: Repository initialized, worktree branch created, and execution estimate completed with no decomposition recommendation.
+Entry gate: Repository initialized, project-local worktree branch created, and execution estimate completed; the estimator recommended decomposition/planning, so execution is bounded into WP-1 through WP-3 and no merge proceeds without REV-1.
 
 Completion gate: Four Markdown files exist, heading inspection passes, and Git status shows documentation-only changes.
 

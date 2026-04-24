@@ -52,8 +52,8 @@ Use words with specific force:
 - `may`: allowed option or non-mandatory action
 - `blocked`: execution cannot proceed until the named condition is resolved
 - `unknown`: known gap; must include a `Q-*` identifier, owner, due date, and resolution plan
-- `deviation`: approved departure from the execution plan; must include a `DEV-*` identifier, owner, rationale, and approval
-- `waiver`: approved exception to a review or approval rule; must include a `WVR-*` identifier, approver, waived rule or finding, rationale, and boundary
+- `deviation`: approved departure from the execution plan; must include a `DEV-*` identifier, owner, approver, rationale, impact, and evidence
+- `waiver`: approved exception to a review or approval rule; must include a `WVR-*` identifier, approver, waived rule or finding, rationale, boundary or expiry, compensating control, and evidence
 
 Avoid ambiguous execution language such as `clean up`, `wire up`, `make robust`, `add coverage`, or `handle edge cases` unless the statement defines the exact target behavior, files, tests, or evidence.
 
@@ -448,7 +448,7 @@ Section status:
 - At least one `REL-*` row is present for anything that ships, deploys, migrates, activates, or changes live operation.
 - Every row has non-empty `Action`, `Timing`, `Owner`, `Abort trigger`, and `Evidence` cells.
 - Rollback is executable by a named role and has a stated limit.
-- If rollback is constrained, the execution level is `E3` or an approved `DEV-*` deviation exists.
+- If rollback is constrained, the execution level is `E3` and the constraint is represented in risks, controls, release actions, and the final gate.
 
 ### Template
 
@@ -505,8 +505,8 @@ Section status:
 - At least one risk row is present, or the section explicitly states `No material risks identified` with rationale.
 - Every `RISK-*` row has non-empty `Impact`, `Likelihood`, `Mitigation`, and `Validation` cells.
 - Open questions either contain at least one `Q-*` row with owner, due date, and resolution path, or state `None` with rationale.
-- Approved deviations either contain at least one `DEV-*` row with approver and rationale, or state `None` with rationale.
-- Approved waivers either contain at least one `WVR-*` row with approver, waived rule or finding, rationale, boundary, and evidence, or state `None` with rationale.
+- Approved deviations either contain at least one `DEV-*` row with owner, approver, rationale, impact, and evidence, or state `None` with rationale.
+- Approved waivers either contain at least one `WVR-*` row with approver, waived rule or finding, rationale, boundary or expiry, compensating control, and evidence, or state `None` with rationale.
 
 ### Template
 
@@ -524,15 +524,15 @@ Open questions:
 
 Approved deviations:
 
-| ID | Deviation | Approver | Rationale | Impact | Evidence |
-| --- | --- | --- | --- | --- | --- |
-| DEV-1 |  |  |  |  |  |
+| ID | Deviation | Owner | Approver | Rationale | Impact | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| DEV-1 |  |  |  |  |  |  |
 
 Approved waivers:
 
-| ID | Waived rule or finding | Approver | Rationale | Boundary or expiry | Evidence |
-| --- | --- | --- | --- | --- | --- |
-| WVR-1 |  |  |  |  |  |
+| ID | Waived rule or finding | Approver | Rationale | Boundary or expiry | Compensating control | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| WVR-1 |  |  |  |  |  |  |
 
 Section status:
 
@@ -573,7 +573,17 @@ Section status:
 - `Entry gate`, `Completion gate`, `Release gate`, `Handoff record`, and `Section status` fields are present and non-empty.
 - No gate contains vague approval language without named evidence.
 - All blocking dependencies, blocking reviews, required validations, and unresolved `Q-*` items are represented.
-- Final readiness state is one of `Ready to investigate`, `Ready to execute`, `Ready to execute with heightened controls`, `Not ready`, or `Completed`.
+- Final readiness state is one of `Ready to investigate`, `Ready to execute`, `Ready to execute with heightened controls`, `Not ready`, or `Completed`, and it satisfies the readiness semantics below.
+
+Readiness semantics:
+
+| State | Allowed when |
+| --- | --- |
+| `Ready to investigate` | Execution level is `E0`, investigation entry gates are satisfied, no required section is `Incomplete`, and any unresolved `Q-*` items are the investigation targets rather than blockers. |
+| `Ready to execute` | Execution level is `E1` or `E2`, the entry gate is satisfied, completion/release/handoff gates are evidence-based, no required section is `Incomplete`, all blocking dependencies and reviews are satisfied, and every `Blocker` or `Major` finding is `Resolved` or validly `Waived by WVR-*`. |
+| `Ready to execute with heightened controls` | Execution level is `E3`, the entry gate is satisfied, completion/release/handoff gates are evidence-based, no required section is `Incomplete`, all blocking dependencies and reviews are satisfied, every `Blocker` or `Major` finding is `Resolved` or validly `Waived by WVR-*`, and heightened controls, independent review, rollback or containment, and waiver approvals are recorded. |
+| `Not ready` | Any required gate is unsatisfied, the execution level is incorrect, a required section is `Incomplete`, a blocking dependency or `Q-*` item is unresolved, approval is missing, or any `Blocker` or `Major` finding is still `Open`. |
+| `Completed` | Approved execution is complete, validation evidence is recorded, release or containment actions are complete or explicitly `N/A`, and the handoff record is available. |
 
 ### Template
 
