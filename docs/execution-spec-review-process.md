@@ -199,7 +199,7 @@ Score each dimension from `0` to `3`:
 | --- | --- |
 | Authority fitness | Is the source decision sufficient for execution? |
 | Scope control | Are inclusions, exclusions, and escalation rules clear? |
-| Sequence adequacy | Are work packages ordered and integrated safely? |
+| Sequence adequacy | Are work packages ordered to prove the critical path early, retire the highest-risk unknowns, and produce validation evidence at each step? |
 | Surface coverage | Are all changed systems, files, data, configs, and contracts represented? |
 | Validation adequacy | Does evidence prove the outcome and risky claims? |
 | Review adequacy | Are the right reviewers assigned to the right surfaces? |
@@ -211,6 +211,7 @@ Return the document for rework if any of the following are true:
 
 - Executors would need to make unapproved design, product, or operational decisions.
 - The sequence creates avoidable integration or deployment hazards.
+- The sequence is primarily component-layer order and does not identify a first proving slice or validation checkpoint.
 - Critical surfaces are omitted from review or validation.
 - The validation plan could pass while the approved outcome remains unmet.
 - The rollback or recovery plan is unsafe for the execution level.
