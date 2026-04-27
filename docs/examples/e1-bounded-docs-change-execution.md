@@ -113,6 +113,8 @@ Primary risks and unknowns:
 
 | ID | Risk or unknown | Why it matters | Owner | Evidence required to retire | Decision gate |
 | --- | --- | --- | --- | --- | --- |
+| Q-1 | Can the template express one bounded documentation execution end-to-end? | If not, procedure expansion would amplify an unproven structure. | Codex | VAL-1 / EVD-1 / EVD-3 bounded-flow inspection. | MS-1 decides whether WP-2 may start. |
+| Q-2 | Can the full documentation set remain coherent once authoring, review, traceability, and milestone gates are combined? | If not, the model is not ready for owner decision or skill packaging. | Codex | VAL-2 / VAL-3 / EVD-1 / EVD-2 / EVD-3 final inspection. | MS-2 decides whether the bounded first draft is acceptable. |
 | RISK-1 | The first draft may under-specify software release execution. | The artifact could pass for docs work but fail for real implementation execution. | Repository owner | Future pilot execution or owner review against a software task. | Decide whether to revise before skill packaging. |
 | RISK-2 | The execution level model may need calibration after real use. | Over- or under-classification would weaken review controls. | Repository owner | Owner review and later pilot feedback. | Decide whether levels are acceptable for first draft. |
 
@@ -149,9 +151,9 @@ Deferred completeness: Skill packaging, additional examples, and publication dec
 
 | ID | Objective | Owner | Package boundary | Editable paths | Read-only paths | Inputs | Outputs | Dependencies | Observable value enabled | Risk retired | Milestone gate | Validation checkpoint | Completion criteria |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| WP-1 | Prove the template can express one bounded execution end-to-end. | Codex | N/A: docs-only. | `docs/execution-spec-template.md`, `docs/examples/e1-bounded-docs-change-execution.md` | `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md` | SRC-1 / SRC-2 / OBJ-1 / SURF-1 / SURF-4 | SURF-1 / SURF-4 | None | Reviewer can inspect one bounded execution path. | RISK-1 / RISK-2 | MS-1 / MS-2 | VAL-1 | Template and example jointly show source authority, scope, work packages, validation, review, rollout, and traceability for one bounded docs change. |
-| WP-2 | Expand the authoring and review docs around the proven flow. | Codex | N/A: docs-only. | `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md` | `docs/execution-spec-template.md`, `docs/examples/e1-bounded-docs-change-execution.md` | WP-1 / SURF-1 / SURF-4 | SURF-2 / SURF-3 | WP-1 | Procedures preserve the proven flow for authors and reviewers. | RISK-1 | MS-2 | VAL-2 | Procedures reference the proven template sections, review dimensions, and decision model without adding new scope. |
-| WP-3 | Tighten traceability, validation, and review gates across the doc set. | Codex | N/A: docs-only. | `docs/execution-spec-template.md`, `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md`, `docs/examples/e1-bounded-docs-change-execution.md` | None | WP-1 / WP-2 / SURF-1 / SURF-2 / SURF-3 / SURF-4 | SURF-1 / SURF-2 / SURF-3 / SURF-4 | WP-1 / WP-2 | Documentation-only artifact remains coherent and reviewable. | RISK-1 / RISK-2 | MS-2 | VAL-3 | Identifiers, headings, validation items, review gates, and Git status show a coherent documentation-only execution artifact. |
+| WP-1 | Prove the template can express one bounded execution end-to-end. | Codex | N/A: docs-only. | `docs/execution-spec-template.md`, `docs/examples/e1-bounded-docs-change-execution.md` | `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md` | SRC-1 / SRC-2 / OBJ-1 / SURF-1 / SURF-4 / Q-1 | SURF-1 / SURF-4 | None | Reviewer can inspect one bounded execution path. | Q-1 | MS-1 / MS-2 | VAL-1 | Template and example jointly show source authority, scope, work packages, validation, review, rollout, and traceability for one bounded docs change. |
+| WP-2 | Expand the authoring and review docs around the proven flow. | Codex | N/A: docs-only. | `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md` | `docs/execution-spec-template.md`, `docs/examples/e1-bounded-docs-change-execution.md` | WP-1 / SURF-1 / SURF-4 / Q-2 | SURF-2 / SURF-3 | WP-1 | Procedures preserve the proven flow for authors and reviewers. | Q-2 partially retired through procedure alignment; final retirement waits for WP-3. | MS-2 | VAL-2 | Procedures reference the proven template sections, review dimensions, and decision model without adding new scope. |
+| WP-3 | Tighten traceability, validation, and review gates across the doc set. | Codex | N/A: docs-only. | `docs/execution-spec-template.md`, `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md`, `docs/examples/e1-bounded-docs-change-execution.md` | None | WP-1 / WP-2 / SURF-1 / SURF-2 / SURF-3 / SURF-4 / Q-2 | SURF-1 / SURF-2 / SURF-3 / SURF-4 | WP-1 / WP-2 | Documentation-only artifact remains coherent and reviewable. | Q-2 | MS-2 | VAL-3 | Identifiers, headings, validation items, review gates, and Git status show a coherent documentation-only execution artifact; RISK-1 and RISK-2 remain open for future pilot or owner calibration. |
 
 Execution sequence: Complete WP-1 first, then use its evidence to complete WP-2, then complete WP-3 and inspect headings, traceability, and Git status.
 
@@ -257,7 +259,7 @@ Risks:
 | RISK-2 | The execution level model may require calibration after use. | Medium | Medium | Repository owner | Treat this as first draft and revise after review. | Owner review. |
 | RISK-3 | Skill packaging is deferred. | Low | High | Repository owner | Add packaging after the docs model is approved. | Future task. |
 
-Open questions: None; rationale: the first-draft scope has no unresolved execution blockers.
+Open questions: Q-1 and Q-2 are execution unknowns retired by WP-1 through WP-3; no unresolved execution blockers remain.
 
 Approved deviations: None; rationale: the execution plan has not departed from the approved documentation-only scope.
 
@@ -272,7 +274,12 @@ Section status: Complete
 | SRC-1 / OBJ-1 | SURF-1 | N/A: docs-only. | WP-1 / WP-3 | MS-1 / MS-2 | CTRL-3 | VAL-1 / VAL-3 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-3 |
 | SRC-1 / OBJ-2 | SURF-2 / SURF-3 | N/A: docs-only. | WP-2 / WP-3 | MS-2 | CTRL-3 | VAL-2 / VAL-3 | REV-1 | REL-1 / REL-2 | EVD-2 / EVD-3 |
 | SRC-2 / OBJ-3 | SURF-4 | N/A: docs-only. | WP-1 / WP-3 | MS-1 / MS-2 | CTRL-1 / CTRL-3 | VAL-1 / VAL-3 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-3 |
+| Observable outcome | SURF-1 / SURF-2 / SURF-3 / SURF-4 | N/A: docs-only. | WP-1 / WP-2 / WP-3 | MS-1 / MS-2 | CTRL-3 | VAL-1 / VAL-2 / VAL-3 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-2 / EVD-3 |
 | Critical path / first proving slice | SURF-1 / SURF-4 | N/A: docs-only. | WP-1 | MS-1 / MS-2 | CTRL-3 | VAL-1 | REV-1 | REL-1 | EVD-1 / EVD-3 |
+| Q-1 | SURF-1 / SURF-4 | N/A: docs-only. | WP-1 | MS-1 | CTRL-3 | VAL-1 | REV-1 | REL-1 | EVD-1 / EVD-3 |
+| Q-2 | SURF-1 / SURF-2 / SURF-3 / SURF-4 | N/A: docs-only. | WP-2 / WP-3 | MS-2 | CTRL-3 | VAL-2 / VAL-3 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-2 / EVD-3 |
+| RISK-1 | SURF-1 | N/A: docs-only. | WP-1 / WP-3 | MS-2 | CTRL-2 / CTRL-3 | Future pilot execution | REV-1 | Deferred skill packaging decision | Future pilot evidence |
+| RISK-2 | SURF-1 / SURF-4 | N/A: docs-only. | WP-1 / WP-3 | MS-2 | CTRL-2 / CTRL-3 | Owner review / future pilot feedback | REV-1 | Deferred skill packaging decision | Owner review notes / future pilot evidence |
 
 Section status: Complete
 
