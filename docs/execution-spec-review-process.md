@@ -150,16 +150,17 @@ Evaluate every section against five quality dimensions:
 | 3. Ownership, Roles, and Decision Points | Are owners, reviewers, and escalation paths explicit? |  |  |
 | 4. Constraints, Assumptions, and Dependencies | Are blockers and assumptions visible and managed? |  |  |
 | 5. Change Surface Inventory | Are all touched systems and review surfaces identified? |  |  |
-| 6. Work Packages and Sequencing | Can the work be executed in the stated order? |  |  |
-| 7. Execution Controls and Drift Management | Will the team detect unsafe scope or design drift? |  |  |
-| 8. Data, Schema, Config, and Contract Handling | Are compatibility and reversibility impacts explicit? |  |  |
-| 9. Validation and Evidence Plan | Does validation prove completion and risky claims? |  |  |
-| 10. Review Plan | Are required reviewers and approval conditions explicit? |  |  |
-| 11. Rollout, Migration, Rollback, and Recovery | Can the change be deployed and recovered safely? |  |  |
-| 12. Observability and Operational Readiness | Can operators detect and respond to failure? |  |  |
-| 13. Risks, Questions, Deviations, and Waivers | Are risks, unknowns, deviations, and waivers honestly represented? |  |  |
-| 14. Execution Traceability Matrix | Is the chain from source to evidence intact? |  |  |
-| 15. Final Execution Gate | Are entry, completion, release, and handoff gates evidence-based? |  |  |
+| 6. Agent-Focused Package Decomposition | Are package boundaries, ladder levels, dependency rules, and agent edit boundaries explicit? |  |  |
+| 7. Work Packages and Sequencing | Can the work be executed in the stated order? |  |  |
+| 8. Execution Controls and Drift Management | Will the team detect unsafe scope or design drift? |  |  |
+| 9. Data, Schema, Config, and Contract Handling | Are compatibility and reversibility impacts explicit? |  |  |
+| 10. Validation and Evidence Plan | Does validation prove completion and risky claims? |  |  |
+| 11. Review Plan | Are required reviewers and approval conditions explicit? |  |  |
+| 12. Rollout, Migration, Rollback, and Recovery | Can the change be deployed and recovered safely? |  |  |
+| 13. Observability and Operational Readiness | Can operators detect and respond to failure? |  |  |
+| 14. Risks, Questions, Deviations, and Waivers | Are risks, unknowns, deviations, and waivers honestly represented? |  |  |
+| 15. Execution Traceability Matrix | Is the chain from source to evidence intact? |  |  |
+| 16. Final Execution Gate | Are entry, completion, release, and handoff gates evidence-based? |  |  |
 
 ### Structural Blocking Conditions
 
@@ -169,6 +170,8 @@ Stop the review if any of the following are true:
 - Source authority is absent or insufficient.
 - Work packages do not cover the stated objectives.
 - Writable change surfaces lack owners or review expectations.
+- Applicable package boundaries lack ladder levels, public interfaces, forbidden dependencies, editable paths, or validation commands.
+- Reusable package candidates depend on app, UI, route, database, deployment, or product-specific runtime code without a waiver.
 - Validation does not cover the highest-risk claim.
 - Rollout or rollback is absent for work that can affect live systems.
 - A blocking dependency is missing from the final gate.
@@ -188,12 +191,13 @@ Execution viability asks whether the plan would complete safely if followed exac
 
 ### Viability Dimensions
 
-Score each dimension from `0` to `3`:
+Score each applicable dimension from `0` to `3`. Use `N/A` only when the corresponding template section is explicitly marked `N/A` with rationale.
 
 - `0`: absent or invalid
 - `1`: weak; major doubt remains
 - `2`: adequate; review can proceed with follow-up
 - `3`: strong; well-supported and internally consistent
+- `N/A`: not applicable because the corresponding template section is explicitly `N/A` with rationale; exclude from minimum numeric score thresholds
 
 | Dimension | Review question |
 | --- | --- |
@@ -201,6 +205,7 @@ Score each dimension from `0` to `3`:
 | Scope control | Are inclusions, exclusions, and escalation rules clear? |
 | Sequence adequacy | Are work packages ordered to prove the critical path early, retire the highest-risk unknowns, and produce validation evidence at each step? |
 | Surface coverage | Are all changed systems, files, data, configs, and contracts represented? |
+| Package boundary adequacy | Are package levels, public interfaces, forbidden dependencies, editable paths, and validation commands specific enough for isolated agent execution? |
 | Validation adequacy | Does evidence prove the outcome and risky claims? |
 | Review adequacy | Are the right reviewers assigned to the right surfaces? |
 | Operational safety | Are rollout, rollback, recovery, and observability credible? |
@@ -211,6 +216,7 @@ Return the document for rework if any of the following are true:
 
 - Executors would need to make unapproved design, product, or operational decisions.
 - The sequence creates avoidable integration or deployment hazards.
+- Package boundaries allow hidden coupling, shared editable paths, or undeclared cross-package changes.
 - The sequence is primarily component-layer order and does not identify a first proving slice or validation checkpoint.
 - Critical surfaces are omitted from review or validation.
 - The validation plan could pass while the approved outcome remains unmet.
@@ -220,10 +226,10 @@ Return the document for rework if any of the following are true:
 
 | Execution level | Minimum acceptable posture |
 | --- | --- |
-| `E0` | No dimension may score `0`; `Authority fitness`, `Scope control`, and `Validation adequacy` shall score at least `2` |
-| `E1` | No dimension may score `0`; `Authority fitness`, `Sequence adequacy`, `Validation adequacy`, and `Review adequacy` shall score at least `2` |
-| `E2` | No dimension may score `0`; all dimensions shall score at least `2` |
-| `E3` | No dimension may score below `2`; `Validation adequacy`, `Review adequacy`, and `Operational safety` should normally score `3` |
+| `E0` | No applicable dimension may score `0`; `Authority fitness`, `Scope control`, and `Validation adequacy` shall score at least `2` |
+| `E1` | No applicable dimension may score `0`; `Authority fitness`, `Sequence adequacy`, `Validation adequacy`, and `Review adequacy` shall score at least `2`; `Package boundary adequacy` shall score at least `2` when section 6 applies |
+| `E2` | No applicable dimension may score `0`; all applicable dimensions shall score at least `2`; `Package boundary adequacy` shall score at least `2` when section 6 applies |
+| `E3` | No applicable dimension may score below `2`; `Validation adequacy`, `Review adequacy`, and `Operational safety` should normally score `3`; `Package boundary adequacy` shall score at least `2` when section 6 applies |
 
 ### Viability Output
 
@@ -237,6 +243,7 @@ Return the document for rework if any of the following are true:
 | Scope control |  |  |
 | Sequence adequacy |  |  |
 | Surface coverage |  |  |
+| Package boundary adequacy |  |  |
 | Validation adequacy |  |  |
 | Review adequacy |  |  |
 | Operational safety |  |  |
@@ -249,6 +256,7 @@ Traceability review confirms that the plan forms an unbroken execution chain.
 
 - Does every `SRC-*` map to at least one `OBJ-*` or `WP-*`?
 - Does every `OBJ-*` map to one or more `WP-*` rows?
+- Does every applicable `PKG-*` map to one or more `SURF-*`, `WP-*`, `REV-*`, and `VAL-*` rows?
 - Does every writable `SURF-*` map to one or more `WP-*`, `REV-*`, and `VAL-*` rows?
 - Does every `WP-*` have validation evidence?
 - Does every high-risk `RISK-*` map to a control, validation item, release action, or observability signal?
@@ -259,6 +267,7 @@ Traceability review confirms that the plan forms an unbroken execution chain.
 Return the document for rework if:
 
 - Any objective has no work package.
+- Any applicable package boundary has no work package, review, or validation path.
 - Any work package has no validation path.
 - Any high-risk surface lacks review coverage.
 - Any release action lacks rollback, containment, or `N/A` rationale.
