@@ -10,10 +10,11 @@ Write the document in this order:
 
 1. Select `E0`, `E1`, `E2`, or `E3`.
 2. Fill Document Control, section 0, and Layer 1 before drafting work packages.
-3. Fill the change surface inventory before assigning work packages.
-4. Fill controls before validation, so validation proves the risky claims instead of only confirming happy paths.
-5. Fill rollout, rollback, observability, and handoff before requesting review.
-6. Complete the traceability matrix and final execution gate last.
+3. Fill the change surface inventory before defining package boundaries.
+4. Fill agent-focused package decomposition before assigning work packages for code, contract, schema, package, or multi-agent implementation.
+5. Fill controls before validation, so validation proves the risky claims instead of only confirming happy paths.
+6. Fill rollout, rollback, observability, and handoff before requesting review.
+7. Complete the traceability matrix and final execution gate last.
 
 Do not use work packages to smuggle in new product, design, or operational decisions. If execution reveals a missing decision, record a `Q-*` question or `DEV-*` deviation and escalate it.
 
@@ -36,6 +37,7 @@ Assign stable IDs before review and do not renumber casually after review starts
 - `SRC-*` identifies the authority for the work.
 - `OBJ-*` and `NG-*` define execution outcomes and exclusions.
 - `SURF-*` identifies change surfaces.
+- `PKG-*` identifies package, module, or reusable library boundaries that constrain agent execution.
 - `WP-*` identifies owned work packages.
 - `CTRL-*` identifies execution safeguards.
 - `VAL-*` identifies validation activities.
@@ -46,6 +48,48 @@ Assign stable IDs before review and do not renumber casually after review starts
 - `RISK-*`, `Q-*`, `DEV-*`, and `WVR-*` identify risk, unresolved questions, approved execution deviations, and approved review waivers.
 
 Use `VAL-*` for proof activities. Use `EVD-*` for the evidence artifacts those activities produce.
+
+## Agent-Focused Package Decomposition
+
+Use section 6 to convert architecture intent into agent execution boundaries.
+
+Each `PKG-*` entry shall answer:
+
+- What the unit owns.
+- What the unit explicitly does not own.
+- What public interface other code may use.
+- What imports and calls are allowed.
+- What imports and calls are forbidden.
+- What state the unit may read or mutate.
+- What paths an assigned agent may edit.
+- What paths an assigned agent may read but not edit.
+- What command proves the unit still works.
+- What blocks promotion to a higher package-ladder level.
+
+Do not classify a unit as a reusable candidate because it seems generally useful. Classify it as level 3 only when it has no product-specific routes, UI assumptions, deployment assumptions, direct database ownership, implicit environment reads, or app-layer imports.
+
+Use the ladder conservatively:
+
+- Use level 0 or 1 for local implementation details that do not need isolated agent ownership.
+- Use level 2 when multiple features need the unit or when an app-specific feature/module needs isolated agent ownership.
+- Use level 3 when the API is project-agnostic but not yet published.
+- Use level 4 only when compatibility, release, and ownership processes exist.
+
+Every `PKG-*` entry shall include a boundary card. If a proposed boundary cannot name forbidden dependencies and editable paths, it is not ready to support parallel agent execution. Revise the boundary before assigning independent work packages.
+
+## Agent Work Package Rules
+
+Each `WP-*` row shall name a `PKG-*` boundary when package decomposition applies. Editable paths are the write authorization for that agent. Read-only paths are context, not ownership.
+
+Before assigning parallel work, check for these invalid conditions:
+
+- Two work packages list the same editable path.
+- A work package needs to change another package's public interface without a coordination trigger.
+- A reusable candidate depends on app, UI, route, database, deployment, or product-specific runtime code.
+- Package validation requires the full application when a package-level command should exist.
+- Business rules are assigned to UI, request-handler, script, or integration-glue surfaces without an explicit rationale.
+
+If any invalid condition is present, either revise the package decomposition, serialize the work packages, or add a named coordination trigger and control.
 
 ## E1 Bounded Change Drafting Rules
 
@@ -61,7 +105,9 @@ For `E1`, keep the artifact short but explicit:
 Before requesting review, the author shall be able to answer `yes` to each question:
 
 - Does every work package trace to approved source authority?
+- Does every applicable work package map to a `PKG-*` boundary with explicit editable paths?
 - Does every writable surface have an owner and review expectation?
+- Are forbidden dependencies and coupling tripwires explicit enough to keep agents inside their assigned scope?
 - Can another engineer execute the sequence without asking for hidden context?
 - Does validation prove the highest-risk claims?
 - Is rollback or containment executable by a named role?

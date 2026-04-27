@@ -104,13 +104,19 @@ Section status: Complete
 
 Section status: Complete
 
-## 6. Work Packages and Sequencing
+## 6. Agent-Focused Package Decomposition
 
-| ID | Objective | Owner | Inputs | Outputs | Dependencies | Completion criteria |
-| --- | --- | --- | --- | --- | --- | --- |
-| WP-1 | Draft execution template. | Codex | SRC-1 / SRC-2 | SURF-1 | None | Template includes levels, vocabulary, applicability, sections, and final gate. |
-| WP-2 | Draft authoring and review procedures. | Codex | SURF-1 | SURF-2 / SURF-3 | WP-1 | Procedures reference the template sections and decision model. |
-| WP-3 | Draft bounded example. | Codex | SURF-1 / SURF-2 / SURF-3 | SURF-4 | WP-1 / WP-2 | Example uses the template vocabulary and shows traceability. |
+N/A rationale: This example documents a bounded documentation-only change. It changes no code, contract, schema, package, or multi-agent implementation surface, so package decomposition is not applicable.
+
+Section status: N/A
+
+## 7. Work Packages and Sequencing
+
+| ID | Objective | Owner | Package boundary | Editable paths | Read-only paths | Inputs | Outputs | Dependencies | Validation | Completion criteria |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| WP-1 | Draft execution template. | Codex | N/A: docs-only. | `docs/execution-spec-template.md` | `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md` | SRC-1 / SRC-2 | SURF-1 | None | VAL-1 / VAL-2 / VAL-3 | Template includes levels, vocabulary, applicability, sections, and final gate. |
+| WP-2 | Draft authoring and review procedures. | Codex | N/A: docs-only. | `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md` | `docs/execution-spec-template.md` | SURF-1 | SURF-2 / SURF-3 | WP-1 | VAL-1 / VAL-2 / VAL-3 | Procedures reference the template sections and decision model. |
+| WP-3 | Draft bounded example. | Codex | N/A: docs-only. | `docs/examples/e1-bounded-docs-change-execution.md` | `docs/execution-spec-template.md`, `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md` | SURF-1 / SURF-2 / SURF-3 | SURF-4 | WP-1 / WP-2 | VAL-1 / VAL-2 / VAL-3 | Example uses the template vocabulary and shows traceability. |
 
 Execution sequence: Complete WP-1, then WP-2, then WP-3, then inspect all headings and Git status.
 
@@ -118,9 +124,11 @@ Parallelization rules: No parallel authorship is required for this bounded first
 
 Integration points: The example shall use section names and identifiers from the template.
 
+Coordination triggers: None; one executor owns all documentation edits.
+
 Section status: Complete
 
-## 7. Execution Controls and Drift Management
+## 8. Execution Controls and Drift Management
 
 | ID | Trigger | Required action | Owner | Evidence |
 | --- | --- | --- | --- | --- |
@@ -134,7 +142,7 @@ Pause or escalation conditions: Pause if the repository owner wants execution sp
 
 Section status: Complete
 
-## 8. Data, Schema, Config, and Contract Handling
+## 9. Data, Schema, Config, and Contract Handling
 
 N/A rationale: Checked surfaces are documentation files only; no data, schema, config, API, event, permission, or contract changes are in scope.
 
@@ -142,7 +150,7 @@ Section status: N/A
 
 ## Layer 3: Validation, Release, and Handoff
 
-## 9. Validation and Evidence Plan
+## 10. Validation and Evidence Plan
 
 | ID | Method | Claim verified | Timing | Owner | Evidence artifact |
 | --- | --- | --- | --- | --- | --- |
@@ -152,7 +160,7 @@ Section status: N/A
 
 Section status: Complete
 
-## 10. Review Plan
+## 11. Review Plan
 
 | ID | Reviewer | Review scope | Blocking? | Completion evidence |
 | --- | --- | --- | --- | --- |
@@ -162,7 +170,7 @@ Approval conditions: The first draft is acceptable when the repository owner agr
 
 Section status: Complete
 
-## 11. Rollout, Migration, Rollback, and Recovery
+## 12. Rollout, Migration, Rollback, and Recovery
 
 | ID | Action | Timing | Owner | Abort trigger | Evidence |
 | --- | --- | --- | --- | --- | --- |
@@ -175,7 +183,7 @@ Recovery limit: No production recovery is required; recovery is limited to Git b
 
 Section status: Complete
 
-## 12. Observability and Operational Readiness
+## 13. Observability and Operational Readiness
 
 N/A rationale: Documentation-only first draft does not run in production or require operational signals.
 
@@ -185,7 +193,7 @@ Monitoring window: N/A.
 
 Section status: N/A
 
-## 13. Risks, Questions, Deviations, and Waivers
+## 14. Risks, Questions, Deviations, and Waivers
 
 Risks:
 
@@ -203,19 +211,19 @@ Approved waivers: None; rationale: no review or approval rule has been waived.
 
 Section status: Complete
 
-## 14. Execution Traceability Matrix
+## 15. Execution Traceability Matrix
 
-| Source or objective | Change surfaces | Work packages | Controls | Validation | Review | Release or ops | Evidence |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| SRC-1 / OBJ-1 | SURF-1 | WP-1 | CTRL-3 | VAL-1 / VAL-2 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-2 |
-| SRC-1 / OBJ-2 | SURF-2 / SURF-3 | WP-2 | CTRL-3 | VAL-1 / VAL-2 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-2 |
-| SRC-2 / OBJ-3 | SURF-4 | WP-3 | CTRL-1 | VAL-1 / VAL-2 / VAL-3 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-3 |
+| Source or objective | Change surfaces | Package boundaries | Work packages | Controls | Validation | Review | Release or ops | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| SRC-1 / OBJ-1 | SURF-1 | N/A: docs-only. | WP-1 | CTRL-3 | VAL-1 / VAL-2 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-2 |
+| SRC-1 / OBJ-2 | SURF-2 / SURF-3 | N/A: docs-only. | WP-2 | CTRL-3 | VAL-1 / VAL-2 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-2 |
+| SRC-2 / OBJ-3 | SURF-4 | N/A: docs-only. | WP-3 | CTRL-1 | VAL-1 / VAL-2 / VAL-3 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-3 |
 
 Section status: Complete
 
-## 15. Final Execution Gate
+## 16. Final Execution Gate
 
-Entry gate: Repository initialized, project-local worktree branch created, and execution estimate completed; the estimator recommended decomposition/planning, so execution is bounded into WP-1 through WP-3 and no merge proceeds without REV-1.
+Entry gate: Repository initialized, project-local worktree branch created, and execution estimate completed; execution is bounded into WP-1 through WP-3 and no merge proceeds without REV-1.
 
 Completion gate: Four Markdown files exist, heading inspection passes, and Git status shows documentation-only changes.
 
