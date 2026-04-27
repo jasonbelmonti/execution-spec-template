@@ -4,14 +4,15 @@ Authoring guidance lives in `docs/execution-spec-authoring-guide.md`. Review pro
 
 ## Purpose
 
-This document is a controlled execution artifact. It shall answer six questions in order:
+This document is a controlled execution artifact. It shall answer seven questions in order:
 
 1. What approved outcome, ticket, or design is being executed?
 2. What work is in scope, out of scope, and blocked by dependencies?
-3. What milestone gates, change surfaces, package boundaries, work packages, and sequencing will produce the outcome?
-4. What controls will prevent unsafe drift during execution?
-5. What evidence and manual verification will prove the work is complete and fit to ship?
-6. How will the change be reviewed, deployed, monitored, rolled back, and handed off?
+3. What observable value, critical path, proving slice, and risk-retirement logic govern execution?
+4. What milestone gates, change surfaces, package boundaries, work packages, and sequencing will produce the outcome?
+5. What controls will prevent unsafe drift during execution?
+6. What evidence and manual verification will prove the work is complete and fit to ship?
+7. How will the change be reviewed, deployed, monitored, rolled back, and handed off?
 
 If the source decision or success criteria are weak, this document shall expose that gap instead of inventing authority.
 
@@ -123,19 +124,20 @@ Do not leave blanks. If something is unknown, write `unknown` and manage it expl
 | 2. Objectives and Non-Objectives | Required | Required | Required | Required |
 | 3. Ownership, Roles, and Decision Points | Required | Required | Required | Required |
 | 4. Constraints, Assumptions, and Dependencies | Required | Required | Required | Required |
-| 5. Change Surface Inventory | Required if any system, repo, document, data, or config changes | Required | Required | Required |
-| 6. Agent-Focused Package Decomposition | Required if code, contracts, schemas, packages, or multi-agent implementation are affected; otherwise `N/A` with rationale | Required if code, contracts, schemas, packages, or multi-agent implementation are affected; otherwise `N/A` with rationale | Required if code, contracts, schemas, packages, or multi-agent implementation are affected; otherwise `N/A` with rationale | Required if code, contracts, schemas, packages, or multi-agent implementation are affected; otherwise `N/A` with rationale |
-| 7. Work Packages and Sequencing | Required | Required | Required | Required |
-| 8. Milestone Gates and Manual Verification | Required | Required | Required | Required |
-| 9. Execution Controls and Drift Management | Required | Required | Required | Required |
-| 10. Data, Schema, Config, and Contract Handling | Required if affected | Required if affected; otherwise `N/A` with rationale | Required if affected | Required if affected |
-| 11. Validation and Evidence Plan | Required | Required | Required | Required |
-| 12. Review Plan | Required | Required | Required | Required |
-| 13. Rollout, Migration, Rollback, and Recovery | Required if anything ships, deploys, migrates, or affects live operation | Required | Required | Required |
-| 14. Observability and Operational Readiness | Required if anything runs or can fail after delivery | Required if production-facing; otherwise `N/A` with rationale | Required | Required |
-| 15. Risks, Questions, Deviations, and Waivers | Required | Required | Required | Required |
-| 16. Execution Traceability Matrix | Required | Required | Required | Required |
-| 17. Final Execution Gate | Required | Required | Required | Required |
+| 5. Evidence-Led Execution Model | Required | Required | Required | Required |
+| 6. Change Surface Inventory | Required if any system, repo, document, data, or config changes | Required | Required | Required |
+| 7. Agent-Focused Package Decomposition | Required if code, contracts, schemas, packages, or multi-agent implementation are affected; otherwise `N/A` with rationale | Required if code, contracts, schemas, packages, or multi-agent implementation are affected; otherwise `N/A` with rationale | Required if code, contracts, schemas, packages, or multi-agent implementation are affected; otherwise `N/A` with rationale | Required if code, contracts, schemas, packages, or multi-agent implementation are affected; otherwise `N/A` with rationale |
+| 8. Work Packages and Sequencing | Required | Required | Required | Required |
+| 9. Milestone Gates and Manual Verification | Required | Required | Required | Required |
+| 10. Execution Controls and Drift Management | Required | Required | Required | Required |
+| 11. Data, Schema, Config, and Contract Handling | Required if affected | Required if affected; otherwise `N/A` with rationale | Required if affected | Required if affected |
+| 12. Validation and Evidence Plan | Required | Required | Required | Required |
+| 13. Review Plan | Required | Required | Required | Required |
+| 14. Rollout, Migration, Rollback, and Recovery | Required if anything ships, deploys, migrates, or affects live operation | Required | Required | Required |
+| 15. Observability and Operational Readiness | Required if anything runs or can fail after delivery | Required if production-facing; otherwise `N/A` with rationale | Required | Required |
+| 16. Risks, Questions, Deviations, and Waivers | Required | Required | Required | Required |
+| 17. Execution Traceability Matrix | Required | Required | Required | Required |
+| 18. Final Execution Gate | Required | Required | Required | Required |
 
 ## Document Control
 
@@ -282,7 +284,7 @@ Section status:
 - At least one `CON-*`, `ASM-*`, or `DEP-*` row is present.
 - Every row has non-empty `Type`, `Statement`, `Owner`, and `Validation or resolution plan` cells.
 - Every `DEP-*` row identifies whether it is blocking or non-blocking.
-- Any blocking dependency appears in section 7 sequencing or section 17 entry gate.
+- Any blocking dependency appears in section 8 sequencing or section 18 entry gate.
 
 ### Template
 
@@ -296,7 +298,53 @@ Section status:
 
 ## Layer 2: Execution Plan
 
-## 5. Change Surface Inventory
+## 5. Evidence-Led Execution Model
+
+### Required Output
+
+- Observable outcome that names the user or system behavior the execution shall make demonstrably true.
+- Core value proposition that explains why the behavior matters.
+- Critical path hypothesis that names the shortest path through the system needed to prove or invalidate the outcome.
+- First proving slice that produces decision-grade evidence before broader implementation.
+- Primary risks and unknowns with the evidence required to retire each one.
+- Sequencing principle that explains why the selected order proves value or retires risk earlier than alternatives.
+- Validation cadence and deferred completeness boundaries.
+
+### Exit Criteria
+
+- `Observable outcome`, `Core value proposition`, `Critical path hypothesis`, `First proving slice`, `Sequencing principle`, `Validation cadence`, `Deferred completeness`, and `Section status` fields are present and non-empty.
+- At least one `RISK-*` or `Q-*` row is present unless the section explicitly states `No material risks or unknowns identified` with rationale.
+- The first proving slice is narrower than the full implementation and produces evidence that a reviewer can inspect.
+- Each risk or unknown names why it matters, evidence required to retire it, owner, and decision gate.
+- The sequencing principle explicitly favors observable value, risk retirement, or both.
+- Component-layer order such as `schema -> API -> service -> UI -> tests` is rejected unless each step proves incremental value, retires risk, and has a validation checkpoint.
+- Deferred completeness lists polish, breadth, edge cases, generalization, or cleanup that is safe to delay until after the proving slice succeeds.
+
+### Template
+
+Observable outcome:
+
+Core value proposition:
+
+Critical path hypothesis:
+
+First proving slice:
+
+Sequencing principle:
+
+Validation cadence:
+
+Deferred completeness:
+
+Primary risks and unknowns:
+
+| ID | Risk or unknown | Why it matters | Owner | Evidence required to retire | Decision gate |
+| --- | --- | --- | --- | --- | --- |
+| RISK-1 / Q-1 |  |  |  | VAL- |  |
+
+Section status:
+
+## 6. Change Surface Inventory
 
 ### Required Output
 
@@ -318,7 +366,7 @@ Section status:
 
 Section status:
 
-## 6. Agent-Focused Package Decomposition
+## 7. Agent-Focused Package Decomposition
 
 ### Required Output
 
@@ -368,17 +416,18 @@ A unit may move from level 3 to level 4 only when all conditions are true:
 - Every code, contract, schema, package, or multi-agent implementation surface has either a `PKG-*` row or an `N/A` rationale.
 - Every `PKG-*` row has a single ladder level and non-empty `Unit`, `Mission`, `Public interface`, `Validation command`, and `Promotion blockers` cells.
 - Every `PKG-*` entry has a boundary card with non-empty `Owns`, `Does not own`, `Allowed dependencies`, `Forbidden dependencies`, `State boundary`, `Agent editable paths`, and `Agent read-only paths` fields.
-- Every work package in section 7 maps to one or more `PKG-*` rows or explains why package decomposition is not applicable.
+- Every `PKG-*` row traces to the section 5 evidence-led model through observable value, risk retired, and validation evidence.
+- Every work package in section 8 maps to one or more `PKG-*` rows or explains why package decomposition is not applicable.
 - No `PKG-*` at level 3 or higher imports application, route, UI, database, deployment, or product-specific runtime code.
-- Coupling tripwires are stated and have required actions in section 9 controls when material.
+- Coupling tripwires are stated and have required actions in section 10 controls when material.
 
 ### Template
 
 Decomposition mission:
 
-| ID | Unit | Ladder level | Mission | Public interface | Validation command | Promotion blockers |
-| --- | --- | --- | --- | --- | --- | --- |
-| PKG-1 |  | 0 / 1 / 2 / 3 / 4 |  |  |  |  |
+| ID | Unit | Ladder level | Mission | Observable value enabled | Risk retired | Public interface | Validation command | Promotion blockers |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| PKG-1 |  | 0 / 1 / 2 / 3 / 4 |  |  | RISK- / Q- / None with rationale |  |  |  |
 
 Boundary card for every `PKG-*` entry:
 
@@ -388,6 +437,12 @@ Boundary card for every `PKG-*` entry:
 Ladder level:
 
 Mission:
+
+Value / risk trace:
+- Observable value enabled:
+- Risk retired:
+- Validation evidence:
+- Blocking unknowns:
 
 Owns:
 - Files/directories:
@@ -465,30 +520,31 @@ N/A rationale:
 
 Section status:
 
-## 7. Work Packages and Sequencing
+## 8. Work Packages and Sequencing
 
 ### Required Output
 
-- Planning preamble that states the sequencing strategy, critical path hypothesis, first proving slice, validation cadence, and deferred completeness.
-- Work packages with objective, owner, inputs, outputs, dependencies, milestone gate, validation checkpoint, and completion criteria.
+- Planning preamble that traces section 5's evidence-led execution model into concrete work package order.
+- Work packages with objective, owner, inputs, outputs, dependencies, observable value enabled, risk retired, milestone gate, validation checkpoint, and completion criteria.
 - Execution order, parallelization constraints, and integration points.
 - Package boundary, editable paths, read-only paths, and validation checkpoint for each work package.
+- Observable value enabled and risk retired for each work package.
 - Coordination triggers for public interface, cross-package, or shared-file changes.
 
 ### Exit Criteria
 
 - At least one `WP-*` row is present.
-- Planning preamble fields are present and non-empty.
-- The first work package proves or invalidates the critical path hypothesis.
+- Planning preamble fields are present and non-empty and do not contradict section 5.
+- The first work package proves or invalidates the section 5 critical path hypothesis.
 - High-risk unknowns are retired before routine implementation.
-- Every work package has non-empty `Objective`, `Owner`, `Package boundary`, `Editable paths`, `Read-only paths`, `Inputs`, `Outputs`, `Dependencies`, `Milestone gate`, `Validation checkpoint`, and `Completion criteria` cells.
+- Every work package has non-empty `Objective`, `Owner`, `Package boundary`, `Editable paths`, `Read-only paths`, `Inputs`, `Outputs`, `Dependencies`, `Observable value enabled`, `Risk retired`, `Milestone gate`, `Validation checkpoint`, and `Completion criteria` cells.
 - Each `WP-*` row links to at least one `MS-*` milestone gate.
 - Each `WP-*` row links to at least one `VAL-*` checkpoint.
 - The sequence describes what must happen before integration and what can proceed in parallel.
 - Parallelization is allowed only after the first proof or after contracts are stable.
-- Component-order plans such as `schema -> API -> UI -> tests` are insufficient unless each step proves incremental value.
+- Component-order plans such as `schema -> API -> UI -> tests` are insufficient unless each step proves incremental value, retires a risk, and has decision-grade validation.
 - Work packages cover every `OBJ-*` and every writable `SURF-*`.
-- Every work package maps to a `PKG-*` boundary when section 6 applies.
+- Every work package maps to a `PKG-*` boundary when section 7 applies.
 - If two work packages share editable paths, the sequence names the coordination point before execution starts.
 
 ### Template
@@ -503,9 +559,9 @@ Validation cadence:
 
 Deferred completeness:
 
-| ID | Objective | Owner | Package boundary | Editable paths | Read-only paths | Inputs | Outputs | Dependencies | Milestone gate | Validation checkpoint | Completion criteria |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| WP-1 |  |  | PKG-1 / N/A with rationale |  |  |  |  |  | MS- | VAL- |  |
+| ID | Objective | Owner | Package boundary | Editable paths | Read-only paths | Inputs | Outputs | Dependencies | Observable value enabled | Risk retired | Milestone gate | Validation checkpoint | Completion criteria |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| WP-1 |  |  | PKG-1 / N/A with rationale |  |  |  |  |  |  | RISK- / Q- / None with rationale | MS- | VAL- |  |
 
 Execution sequence:
 
@@ -517,7 +573,7 @@ Coordination triggers:
 
 Section status:
 
-## 8. Milestone Gates and Manual Verification
+## 9. Milestone Gates and Manual Verification
 
 ### Required Output
 
@@ -549,7 +605,7 @@ Manual verification guide:
 
 Section status:
 
-## 9. Execution Controls and Drift Management
+## 10. Execution Controls and Drift Management
 
 ### Required Output
 
@@ -576,7 +632,7 @@ Pause or escalation conditions:
 
 Section status:
 
-## 10. Data, Schema, Config, and Contract Handling
+## 11. Data, Schema, Config, and Contract Handling
 
 ### Required Output
 
@@ -603,7 +659,7 @@ Section status:
 
 ## Layer 3: Validation, Release, and Handoff
 
-## 11. Validation and Evidence Plan
+## 12. Validation and Evidence Plan
 
 ### Required Output
 
@@ -615,8 +671,8 @@ Section status:
 
 - At least one `VAL-*` row is present.
 - Every row has non-empty `Method`, `Claim verified`, `Timing`, `Owner`, and `Evidence artifact` cells.
-- Every `OBJ-*`, `WP-*`, and high-risk `RISK-*` has validation coverage.
-- Validation includes the highest-risk claim, not only easy success cases.
+- Every `OBJ-*`, `WP-*`, section 5 first proving slice, and high-risk `RISK-*` has validation coverage.
+- Validation includes the highest-risk claim and the observable outcome, not only easy success cases.
 
 ### Template
 
@@ -626,7 +682,7 @@ Section status:
 
 Section status:
 
-## 12. Review Plan
+## 13. Review Plan
 
 ### Required Output
 
@@ -651,7 +707,7 @@ Approval conditions:
 
 Section status:
 
-## 13. Rollout, Migration, Rollback, and Recovery
+## 14. Rollout, Migration, Rollback, and Recovery
 
 ### Required Output
 
@@ -679,7 +735,7 @@ Recovery limit:
 
 Section status:
 
-## 14. Observability and Operational Readiness
+## 15. Observability and Operational Readiness
 
 ### Required Output
 
@@ -708,7 +764,7 @@ N/A rationale:
 
 Section status:
 
-## 15. Risks, Questions, Deviations, and Waivers
+## 16. Risks, Questions, Deviations, and Waivers
 
 ### Required Output
 
@@ -753,16 +809,17 @@ Approved waivers:
 
 Section status:
 
-## 16. Execution Traceability Matrix
+## 17. Execution Traceability Matrix
 
 ### Required Output
 
-- Mapping from source authority to objectives, change surfaces, package boundaries, work packages, milestones, validation, review, release, and evidence.
+- Mapping from source authority to objectives, evidence-led execution model, change surfaces, package boundaries, work packages, milestones, validation, review, release, and evidence.
 - Explicit coverage for every objective and high-risk item.
 
 ### Exit Criteria
 
 - Every `SRC-*` and `OBJ-*` appears in the matrix.
+- The section 5 observable outcome, critical path hypothesis, first proving slice, and primary risks or unknowns appear in the matrix.
 - Every applicable `PKG-*` maps to at least one `SURF-*`, `WP-*`, `VAL-*`, and `REV-*`.
 - Every writable `SURF-*` maps to at least one `WP-*`, `MS-*`, `VAL-*`, and `REV-*`.
 - Every `WP-*` maps to at least one `OBJ-*`, one `MS-*`, and one `VAL-*`.
@@ -772,13 +829,13 @@ Section status:
 
 ### Template
 
-| Source or objective | Change surfaces | Package boundaries | Work packages | Milestones | Controls | Validation | Review | Release or ops | Evidence |
+| Source, objective, or evidence-led claim | Change surfaces | Package boundaries | Work packages | Milestones | Controls | Validation | Review | Release or ops | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| SRC-1 / OBJ-1 | SURF-1 | PKG-1 | WP-1 | MS-1 | CTRL-1 | VAL-1 | REV-1 | REL-1 / OBS-1 | EVD-1 |
+| SRC-1 / OBJ-1 / Critical path | SURF-1 | PKG-1 | WP-1 | MS-1 | CTRL-1 | VAL-1 | REV-1 | REL-1 / OBS-1 | EVD-1 |
 
 Section status:
 
-## 17. Final Execution Gate
+## 18. Final Execution Gate
 
 ### Required Output
 

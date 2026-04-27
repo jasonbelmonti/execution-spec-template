@@ -10,15 +10,32 @@ Write the document in this order:
 
 1. Select `E0`, `E1`, `E2`, or `E3`.
 2. Fill Document Control, section 0, and Layer 1 before drafting work packages.
-3. Fill the change surface inventory before defining package boundaries.
-4. Fill agent-focused package decomposition before assigning work packages for code, contract, schema, package, or multi-agent implementation.
-5. After inventorying change surfaces and package boundaries, identify the core value proposition, critical path hypothesis, top unknowns, first proving slice, and sequencing strategy before assigning work packages.
-6. Define milestone gates, due points, and manual verification guides after assigning work packages and before filling controls or validation.
-7. Fill controls before validation, so validation proves the risky claims instead of only confirming happy paths.
-8. Fill rollout, rollback, observability, and handoff before requesting review.
-9. Complete the traceability matrix and final execution gate last.
+3. Fill the evidence-led execution model before change surfaces, package boundaries, or work packages.
+4. Fill the change surface inventory before defining package boundaries.
+5. Fill agent-focused package decomposition before assigning work packages for code, contract, schema, package, or multi-agent implementation.
+6. Convert the evidence-led execution model into work packages and sequencing.
+7. Define milestone gates, due points, and manual verification guides after assigning work packages and before filling controls or validation.
+8. Fill controls before validation, so validation proves observable value and risky claims instead of only confirming happy paths.
+9. Fill rollout, rollback, observability, and handoff before requesting review.
+10. Complete the traceability matrix and final execution gate last.
 
 Do not use work packages to smuggle in new product, design, or operational decisions. If execution reveals a missing decision, record a `Q-*` question or `DEV-*` deviation and escalate it.
+
+## Evidence-Led Execution Model
+
+Section 5 is mandatory for every execution level. It is the place where the spec proves that execution is organized around observable value and risk retirement, not just implementation mechanics.
+
+Write section 5 before assigning `PKG-*` or `WP-*` entries. The section shall define:
+
+- The observable outcome: the user or system behavior that must become demonstrably true.
+- The core value proposition: why that behavior matters.
+- The critical path hypothesis: the shortest path through the system that proves or invalidates the outcome.
+- The first proving slice: the narrowest end-to-end behavior or bounded spike that can produce decision-grade evidence.
+- Primary risks and unknowns: the assumptions that could invalidate the approach.
+- The sequencing principle: why this order proves value or retires risk earlier than alternatives.
+- Validation cadence and deferred completeness: what evidence appears when, and what is intentionally delayed.
+
+If the first proving slice cannot safely traverse the critical path, author an `E0` or early `WP-*` spike with a specific decision question and stop condition. Do not hide discovery work inside routine implementation packages.
 
 ## Sequencing Strategy
 
@@ -66,16 +83,18 @@ Assign stable IDs before review and do not renumber casually after review starts
 
 Use `VAL-*` for proof activities. Use `EVD-*` for the evidence artifacts those activities produce.
 
-Use `MS-*` for hard approval gates. Each milestone shall name the covered work, due point, human verifier, prerequisite evidence, step-by-step manual verification guide, approval decision, and failure path.
+Use `MS-*` for hard approval gates. Each milestone shall name the covered work, due point, human verifier, prerequisite evidence, review gate, step-by-step manual verification guide, approval decision, and failure path.
 
 ## Agent-Focused Package Decomposition
 
-Use section 6 to convert architecture intent into agent execution boundaries.
+Use section 7 to convert architecture intent into agent execution boundaries. Package boundaries shall serve the evidence-led execution model from section 5; they do not replace it.
 
 Each `PKG-*` entry shall answer:
 
 - What the unit owns.
 - What the unit explicitly does not own.
+- What observable value the unit enables.
+- What risk or unknown the unit retires.
 - What public interface other code may use.
 - What imports and calls are allowed.
 - What imports and calls are forbidden.
@@ -94,14 +113,18 @@ Use the ladder conservatively:
 - Use level 3 when the API is project-agnostic but not yet published.
 - Use level 4 only when compatibility, release, and ownership processes exist.
 
-Every `PKG-*` entry shall include a boundary card. If a proposed boundary cannot name forbidden dependencies and editable paths, it is not ready to support parallel agent execution. Revise the boundary before assigning independent work packages.
+Every `PKG-*` entry shall include a boundary card and value/risk trace. If a proposed boundary cannot name forbidden dependencies, editable paths, observable value, and risk retired, it is not ready to support parallel agent execution. Revise the boundary before assigning independent work packages.
 
 ## Agent Work Package Rules
 
 Each `WP-*` row shall name a `PKG-*` boundary when package decomposition applies. Editable paths are the write authorization for that agent. Read-only paths are context, not ownership.
 
+Each `WP-*` row shall also name the observable value it enables, the risk or unknown it retires, and the `VAL-*` checkpoint that proves the claim. Use `None with rationale` only when a work package is explicitly routine follow-through after the first proving slice has already produced decision-grade evidence.
+
 Before assigning parallel work, check for these invalid conditions:
 
+- Work packages do not trace to section 5.
+- The first work package does not prove or invalidate the critical path hypothesis.
 - Two work packages list the same editable path.
 - A work package needs to change another package's public interface without a coordination trigger.
 - A reusable candidate depends on app, UI, route, database, deployment, or product-specific runtime code.
@@ -139,11 +162,12 @@ Before requesting review, the author shall be able to answer `yes` to each quest
 - Does every applicable work package map to a `PKG-*` boundary with explicit editable paths?
 - Does every work package map to a milestone gate with human verification?
 - Does every milestone state the due point where human approval becomes required?
+- Does every package and work package trace to observable value, risk retirement, and validation evidence?
 - Does every writable surface have an owner and review expectation?
 - Are forbidden dependencies and coupling tripwires explicit enough to keep agents inside their assigned scope?
 - Can another engineer execute the sequence without asking for hidden context?
 - Can the named verifier execute each milestone guide step-by-step and capture evidence?
-- Does validation prove the highest-risk claims?
+- Does validation prove the observable outcome and highest-risk claims?
 - Is rollback or containment executable by a named role?
 - Are unresolved questions either non-blocking or represented in the final gate?
 - Would the plan still be honest if the execution level were raised by one step?
