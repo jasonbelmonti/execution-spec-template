@@ -8,9 +8,9 @@ This document is a controlled execution artifact. It shall answer six questions 
 
 1. What approved outcome, ticket, or design is being executed?
 2. What work is in scope, out of scope, and blocked by dependencies?
-3. What change surfaces, package boundaries, work packages, and sequencing will produce the outcome?
+3. What milestone gates, change surfaces, package boundaries, work packages, and sequencing will produce the outcome?
 4. What controls will prevent unsafe drift during execution?
-5. What evidence will prove the work is complete and fit to ship?
+5. What evidence and manual verification will prove the work is complete and fit to ship?
 6. How will the change be reviewed, deployed, monitored, rolled back, and handed off?
 
 If the source decision or success criteria are weak, this document shall expose that gap instead of inventing authority.
@@ -23,7 +23,7 @@ Select one execution level before writing the plan. Use the highest level that a
 | --- | --- | --- | --- |
 | `E0 Discovery Execution` | The execution objective is to retire uncertainty through a spike, prototype, audit, or measurement pass. | Implementation details may be provisional if every unknown is bounded and tied to evidence capture. | Approval means "approved to investigate," not "approved to ship." |
 | `E1 Bounded Change` | The work is small, reversible, contained to one owner, and has bounded operational risk. | Sections may be concise. Omitted sections require `N/A` rationale. Unknowns are allowed only if they do not block safe execution. | Approval means "approved to execute." |
-| `E2 Standard Execution` | The work is intended for production or durable internal use and does not qualify for `E1` or trigger `E3`. This is the default execution level. | Work packages, validation, rollout, rollback, and handoff shall be complete enough for another engineer to execute. | Approval means "approved to execute." |
+| `E2 Standard Execution` | The work is intended for production or durable internal use and does not qualify for `E1` or trigger `E3`. This is the default execution level. | Work packages, milestone gates, validation, rollout, rollback, and handoff shall be complete enough for another engineer to execute. | Approval means "approved to execute." |
 | `E3 Critical Execution` | Failure could cause safety impact, security incident, regulatory breach, irreversible data loss, large financial loss, or broad operational outage. | All required sections shall be complete, independently reviewable, and backed by heightened controls. Waivers shall be explicit and approved. | Approval means "approved to execute under heightened controls." |
 
 Use `E1` only when all of the following are true:
@@ -54,6 +54,8 @@ Use words with specific force:
 - `unknown`: known gap; must include a `Q-*` identifier, owner, due date, and resolution plan
 - `deviation`: approved departure from the execution plan; must include a `DEV-*` identifier, owner, approver, rationale, impact, and evidence
 - `waiver`: approved exception to a review or approval rule; must include a `WVR-*` identifier, approver, waived rule or finding, rationale, boundary or expiry, compensating control, and evidence
+- `milestone gate`: human approval checkpoint that must include an `MS-*` identifier, covered work, due point, verifier, step-by-step manual verification guide, required evidence, approval decision, and failure path
+- `manual verification guide`: ordered human-operator procedure with observable expected results and evidence capture for the full functionality covered by a milestone gate
 
 Use planning strategy terms with specific meaning:
 
@@ -79,6 +81,7 @@ Assign stable identifiers and reuse them throughout the document:
 - `SURF-*` for change surfaces, modules, systems, or repositories
 - `PKG-*` for package, module, or library boundaries intended to constrain agent execution
 - `WP-*` for work packages
+- `MS-*` for milestone gates and human verification checkpoints
 - `CTRL-*` for execution controls and safeguards
 - `VAL-*` for validation items and evidence
 - `REV-*` for review checks
@@ -97,7 +100,7 @@ Every section shall be evaluated on five dimensions:
 - `Presence`: required fields exist
 - `Precision`: statements are specific, singular, and falsifiable
 - `Authority`: execution claims cite a source decision, owner, or approved assumption
-- `Traceability`: work maps to objectives, validation, review, and release evidence
+- `Traceability`: work maps to objectives, milestone gates, validation, review, and release evidence
 - `Execution utility`: another qualified engineer could act on the section without hidden context
 
 Use one status per section:
@@ -123,15 +126,16 @@ Do not leave blanks. If something is unknown, write `unknown` and manage it expl
 | 5. Change Surface Inventory | Required if any system, repo, document, data, or config changes | Required | Required | Required |
 | 6. Agent-Focused Package Decomposition | Required if code, contracts, schemas, packages, or multi-agent implementation are affected; otherwise `N/A` with rationale | Required if code, contracts, schemas, packages, or multi-agent implementation are affected; otherwise `N/A` with rationale | Required if code, contracts, schemas, packages, or multi-agent implementation are affected; otherwise `N/A` with rationale | Required if code, contracts, schemas, packages, or multi-agent implementation are affected; otherwise `N/A` with rationale |
 | 7. Work Packages and Sequencing | Required | Required | Required | Required |
-| 8. Execution Controls and Drift Management | Required | Required | Required | Required |
-| 9. Data, Schema, Config, and Contract Handling | Required if affected | Required if affected; otherwise `N/A` with rationale | Required if affected | Required if affected |
-| 10. Validation and Evidence Plan | Required | Required | Required | Required |
-| 11. Review Plan | Required | Required | Required | Required |
-| 12. Rollout, Migration, Rollback, and Recovery | Required if anything ships, deploys, migrates, or affects live operation | Required | Required | Required |
-| 13. Observability and Operational Readiness | Required if anything runs or can fail after delivery | Required if production-facing; otherwise `N/A` with rationale | Required | Required |
-| 14. Risks, Questions, Deviations, and Waivers | Required | Required | Required | Required |
-| 15. Execution Traceability Matrix | Required | Required | Required | Required |
-| 16. Final Execution Gate | Required | Required | Required | Required |
+| 8. Milestone Gates and Manual Verification | Required | Required | Required | Required |
+| 9. Execution Controls and Drift Management | Required | Required | Required | Required |
+| 10. Data, Schema, Config, and Contract Handling | Required if affected | Required if affected; otherwise `N/A` with rationale | Required if affected | Required if affected |
+| 11. Validation and Evidence Plan | Required | Required | Required | Required |
+| 12. Review Plan | Required | Required | Required | Required |
+| 13. Rollout, Migration, Rollback, and Recovery | Required if anything ships, deploys, migrates, or affects live operation | Required | Required | Required |
+| 14. Observability and Operational Readiness | Required if anything runs or can fail after delivery | Required if production-facing; otherwise `N/A` with rationale | Required | Required |
+| 15. Risks, Questions, Deviations, and Waivers | Required | Required | Required | Required |
+| 16. Execution Traceability Matrix | Required | Required | Required | Required |
+| 17. Final Execution Gate | Required | Required | Required | Required |
 
 ## Document Control
 
@@ -278,7 +282,7 @@ Section status:
 - At least one `CON-*`, `ASM-*`, or `DEP-*` row is present.
 - Every row has non-empty `Type`, `Statement`, `Owner`, and `Validation or resolution plan` cells.
 - Every `DEP-*` row identifies whether it is blocking or non-blocking.
-- Any blocking dependency appears in section 7 sequencing or section 16 entry gate.
+- Any blocking dependency appears in section 7 sequencing or section 17 entry gate.
 
 ### Template
 
@@ -366,7 +370,7 @@ A unit may move from level 3 to level 4 only when all conditions are true:
 - Every `PKG-*` entry has a boundary card with non-empty `Owns`, `Does not own`, `Allowed dependencies`, `Forbidden dependencies`, `State boundary`, `Agent editable paths`, and `Agent read-only paths` fields.
 - Every work package in section 7 maps to one or more `PKG-*` rows or explains why package decomposition is not applicable.
 - No `PKG-*` at level 3 or higher imports application, route, UI, database, deployment, or product-specific runtime code.
-- Coupling tripwires are stated and have required actions in section 8 controls when material.
+- Coupling tripwires are stated and have required actions in section 9 controls when material.
 
 ### Template
 
@@ -466,7 +470,7 @@ Section status:
 ### Required Output
 
 - Planning preamble that states the sequencing strategy, critical path hypothesis, first proving slice, validation cadence, and deferred completeness.
-- Work packages with objective, owner, inputs, outputs, dependencies, validation checkpoint, and completion criteria.
+- Work packages with objective, owner, inputs, outputs, dependencies, milestone gate, validation checkpoint, and completion criteria.
 - Execution order, parallelization constraints, and integration points.
 - Package boundary, editable paths, read-only paths, and validation checkpoint for each work package.
 - Coordination triggers for public interface, cross-package, or shared-file changes.
@@ -477,7 +481,8 @@ Section status:
 - Planning preamble fields are present and non-empty.
 - The first work package proves or invalidates the critical path hypothesis.
 - High-risk unknowns are retired before routine implementation.
-- Every work package has non-empty `Objective`, `Owner`, `Package boundary`, `Editable paths`, `Read-only paths`, `Inputs`, `Outputs`, `Dependencies`, `Validation checkpoint`, and `Completion criteria` cells.
+- Every work package has non-empty `Objective`, `Owner`, `Package boundary`, `Editable paths`, `Read-only paths`, `Inputs`, `Outputs`, `Dependencies`, `Milestone gate`, `Validation checkpoint`, and `Completion criteria` cells.
+- Each `WP-*` row links to at least one `MS-*` milestone gate.
 - Each `WP-*` row links to at least one `VAL-*` checkpoint.
 - The sequence describes what must happen before integration and what can proceed in parallel.
 - Parallelization is allowed only after the first proof or after contracts are stable.
@@ -498,9 +503,9 @@ Validation cadence:
 
 Deferred completeness:
 
-| ID | Objective | Owner | Package boundary | Editable paths | Read-only paths | Inputs | Outputs | Dependencies | Validation checkpoint | Completion criteria |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| WP-1 |  |  | PKG-1 / N/A with rationale |  |  |  |  |  | VAL- |  |
+| ID | Objective | Owner | Package boundary | Editable paths | Read-only paths | Inputs | Outputs | Dependencies | Milestone gate | Validation checkpoint | Completion criteria |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| WP-1 |  |  | PKG-1 / N/A with rationale |  |  |  |  |  | MS- | VAL- |  |
 
 Execution sequence:
 
@@ -512,7 +517,39 @@ Coordination triggers:
 
 Section status:
 
-## 8. Execution Controls and Drift Management
+## 8. Milestone Gates and Manual Verification
+
+### Required Output
+
+- Milestone gates that define required human approval checkpoints for execution progress, merge, release, or completion.
+- Covered functionality, covered work packages, due point, prerequisites, review gate, required evidence, verifier, approval decision, and failure path for each gate.
+- Step-by-step manual verification guide for each milestone that covers the full functionality encapsulated by the milestone.
+
+### Exit Criteria
+
+- At least one `MS-*` row is present.
+- Every milestone row has non-empty `Gate objective`, `Covered work`, `Due point`, `Human verifier`, `Prerequisites`, `Review gate`, `Required evidence`, `Approval decision`, and `Failure path` cells.
+- Every `MS-*` maps to at least one `WP-*`, one `VAL-*`, one `REV-*`, and one `EVD-*`.
+- Every `MS-*` has at least one manual verification guide step.
+- Manual verification steps are ordered, executable by the named verifier, and include observable expected results.
+- Manual verification covers the full functionality represented by the milestone's `OBJ-*`, `SURF-*`, `PKG-*`, and `WP-*` scope, or records an explicit `N/A` rationale for excluded behavior.
+- No milestone can be approved solely by automated test completion; human verification evidence and approval record are required when the milestone's due point is reached.
+
+### Template
+
+| ID | Gate objective | Covered work | Due point | Human verifier | Prerequisites | Review gate | Required evidence | Approval decision | Failure path |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| MS-1 |  | OBJ- / SURF- / PKG- / WP- | Before WP- / before merge / before release / before completion |  | VAL- / EVD- | REV- | EVD- | Approve / Reject / Conditional approval |  |
+
+Manual verification guide:
+
+| Step ID | Milestone | Operator action | Expected result | Evidence artifact |
+| --- | --- | --- | --- | --- |
+| MV-1 | MS-1 |  |  | EVD- |
+
+Section status:
+
+## 9. Execution Controls and Drift Management
 
 ### Required Output
 
@@ -539,7 +576,7 @@ Pause or escalation conditions:
 
 Section status:
 
-## 9. Data, Schema, Config, and Contract Handling
+## 10. Data, Schema, Config, and Contract Handling
 
 ### Required Output
 
@@ -566,7 +603,7 @@ Section status:
 
 ## Layer 3: Validation, Release, and Handoff
 
-## 10. Validation and Evidence Plan
+## 11. Validation and Evidence Plan
 
 ### Required Output
 
@@ -589,7 +626,7 @@ Section status:
 
 Section status:
 
-## 11. Review Plan
+## 12. Review Plan
 
 ### Required Output
 
@@ -614,7 +651,7 @@ Approval conditions:
 
 Section status:
 
-## 12. Rollout, Migration, Rollback, and Recovery
+## 13. Rollout, Migration, Rollback, and Recovery
 
 ### Required Output
 
@@ -642,7 +679,7 @@ Recovery limit:
 
 Section status:
 
-## 13. Observability and Operational Readiness
+## 14. Observability and Operational Readiness
 
 ### Required Output
 
@@ -671,7 +708,7 @@ N/A rationale:
 
 Section status:
 
-## 14. Risks, Questions, Deviations, and Waivers
+## 15. Risks, Questions, Deviations, and Waivers
 
 ### Required Output
 
@@ -716,44 +753,48 @@ Approved waivers:
 
 Section status:
 
-## 15. Execution Traceability Matrix
+## 16. Execution Traceability Matrix
 
 ### Required Output
 
-- Mapping from source authority to objectives, change surfaces, package boundaries, work packages, validation, review, release, and evidence.
+- Mapping from source authority to objectives, change surfaces, package boundaries, work packages, milestones, validation, review, release, and evidence.
 - Explicit coverage for every objective and high-risk item.
 
 ### Exit Criteria
 
 - Every `SRC-*` and `OBJ-*` appears in the matrix.
 - Every applicable `PKG-*` maps to at least one `SURF-*`, `WP-*`, `VAL-*`, and `REV-*`.
-- Every writable `SURF-*` maps to at least one `WP-*`, `VAL-*`, and `REV-*`.
-- Every `WP-*` maps to at least one `OBJ-*` and one `VAL-*`.
+- Every writable `SURF-*` maps to at least one `WP-*`, `MS-*`, `VAL-*`, and `REV-*`.
+- Every `WP-*` maps to at least one `OBJ-*`, one `MS-*`, and one `VAL-*`.
+- Every `MS-*` maps to at least one `WP-*`, one `VAL-*`, one `REV-*`, and one `EVD-*`.
 - Every high-risk `RISK-*` maps to at least one `CTRL-*`, `VAL-*`, or `REL-*`.
 - Every release action maps to evidence or an `N/A` rationale.
 
 ### Template
 
-| Source or objective | Change surfaces | Package boundaries | Work packages | Controls | Validation | Review | Release or ops | Evidence |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| SRC-1 / OBJ-1 | SURF-1 | PKG-1 | WP-1 | CTRL-1 | VAL-1 | REV-1 | REL-1 / OBS-1 | EVD-1 |
+| Source or objective | Change surfaces | Package boundaries | Work packages | Milestones | Controls | Validation | Review | Release or ops | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| SRC-1 / OBJ-1 | SURF-1 | PKG-1 | WP-1 | MS-1 | CTRL-1 | VAL-1 | REV-1 | REL-1 / OBS-1 | EVD-1 |
 
 Section status:
 
-## 16. Final Execution Gate
+## 17. Final Execution Gate
 
 ### Required Output
 
 - Entry gate before execution starts.
+- Milestone gate plan before execution and milestone approval gates before their stated due points.
 - Merge or completion gate before declaring work done.
 - Release gate before activation or deployment.
 - Handoff record after execution.
 
 ### Exit Criteria
 
-- `Entry gate`, `Completion gate`, `Release gate`, `Handoff record`, and `Section status` fields are present and non-empty.
+- `Entry gate`, `Milestone approval gate`, `Completion gate`, `Release gate`, `Handoff record`, and `Section status` fields are present and non-empty.
 - No gate contains vague approval language without named evidence.
-- All blocking dependencies, blocking reviews, required validations, and unresolved `Q-*` items are represented.
+- All blocking dependencies, blocking reviews, required validations, and unresolved `Q-*` items are represented, and all blocking milestone gates have due points.
+- Every required `MS-*` is fully specified before execution approval: due point, named verifier, manual verification guide, required evidence, approval decision, and failure path.
+- Every required `MS-*` whose due point has arrived has named verifier approval evidence; pending future milestone approvals do not block `Ready to execute` unless the milestone is an entry prerequisite.
 - Final readiness state is one of `Ready to investigate`, `Ready to execute`, `Ready to execute with heightened controls`, `Not ready`, or `Completed`, and it satisfies the readiness semantics below.
 
 Readiness semantics:
@@ -761,14 +802,16 @@ Readiness semantics:
 | State | Allowed when |
 | --- | --- |
 | `Ready to investigate` | Execution level is `E0`, investigation entry gates are satisfied, no required section is `Incomplete`, and any unresolved `Q-*` items are the investigation targets rather than blockers. |
-| `Ready to execute` | Execution level is `E1` or `E2`, the entry gate is satisfied, completion/release/handoff gates are evidence-based, no required section is `Incomplete`, all blocking dependencies and reviews are satisfied, and every `Blocker` or `Major` finding is `Resolved` or validly `Waived by WVR-*`. |
-| `Ready to execute with heightened controls` | Execution level is `E3`, the entry gate is satisfied, completion/release/handoff gates are evidence-based, no required section is `Incomplete`, all blocking dependencies and reviews are satisfied, every `Blocker` or `Major` finding is `Resolved` or validly `Waived by WVR-*`, and heightened controls, independent review, rollback or containment, and waiver approvals are recorded. |
-| `Not ready` | Any required gate is unsatisfied, the execution level is incorrect, a required section is `Incomplete`, a blocking dependency or `Q-*` item is unresolved, approval is missing, or any `Blocker` or `Major` finding is still `Open`. |
-| `Completed` | Approved execution is complete, validation evidence is recorded, release or containment actions are complete or explicitly `N/A`, and the handoff record is available. |
+| `Ready to execute` | Execution level is `E1` or `E2`, the entry gate is satisfied, milestone/completion/release/handoff gates are evidence-based, all milestones are fully specified, all entry-required milestone approvals are recorded, no required section is `Incomplete`, all blocking dependencies and reviews are satisfied, and every `Blocker` or `Major` finding is `Resolved` or validly `Waived by WVR-*`. |
+| `Ready to execute with heightened controls` | Execution level is `E3`, the entry gate is satisfied, milestone/completion/release/handoff gates are evidence-based, all milestones are fully specified, all entry-required milestone approvals are recorded, no required section is `Incomplete`, all blocking dependencies and reviews are satisfied, every `Blocker` or `Major` finding is `Resolved` or validly `Waived by WVR-*`, and heightened controls, independent review, rollback or containment, and waiver approvals are recorded. |
+| `Not ready` | Any required gate is unsatisfied, the execution level is incorrect, a required section is `Incomplete`, a blocking dependency or `Q-*` item is unresolved, an `MS-*` gate is unspecified, entry-required milestone approval is missing, due milestone approval is missing, or any `Blocker` or `Major` finding is still `Open`. |
+| `Completed` | Approved execution is complete, milestone approvals and validation evidence are recorded, release or containment actions are complete or explicitly `N/A`, and the handoff record is available. |
 
 ### Template
 
 Entry gate:
+
+Milestone approval gate:
 
 Completion gate:
 
