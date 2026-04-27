@@ -55,6 +55,15 @@ Use words with specific force:
 - `deviation`: approved departure from the execution plan; must include a `DEV-*` identifier, owner, approver, rationale, impact, and evidence
 - `waiver`: approved exception to a review or approval rule; must include a `WVR-*` identifier, approver, waived rule or finding, rationale, boundary or expiry, compensating control, and evidence
 
+Use planning strategy terms with specific meaning:
+
+- `critical path hypothesis`: the smallest execution path believed to prove or invalidate the approved outcome
+- `proving slice`: the first work package or sequence segment that produces evidence about the critical path
+- `risk retirement`: sequencing work to resolve high-risk unknowns before routine implementation
+- `progressive value`: sequencing work so each completed slice produces independently reviewable value or evidence
+- `validation checkpoint`: a `VAL-*` item that proves a work package output or decision point
+- `deferred completeness`: explicitly delayed polish, breadth, or exhaustive implementation that is safe only after the proving slice succeeds
+
 Avoid ambiguous execution language such as `clean up`, `wire up`, `make robust`, `add coverage`, or `handle edge cases` unless the statement defines the exact target behavior, files, tests, or evidence.
 
 ## Identifier Scheme
@@ -307,22 +316,39 @@ Section status:
 
 ### Required Output
 
-- Work packages with objective, owner, inputs, outputs, dependencies, and completion criteria.
+- Planning preamble that states the sequencing strategy, critical path hypothesis, first proving slice, validation cadence, and deferred completeness.
+- Work packages with objective, owner, inputs, outputs, dependencies, validation checkpoint, and completion criteria.
 - Execution order, parallelization constraints, and integration points.
 - File or module ownership if multiple implementers are involved.
 
 ### Exit Criteria
 
 - At least one `WP-*` row is present.
-- Every work package has non-empty `Objective`, `Owner`, `Inputs`, `Outputs`, `Dependencies`, and `Completion criteria` cells.
+- Planning preamble fields are present and non-empty.
+- The first work package proves or invalidates the critical path hypothesis.
+- High-risk unknowns are retired before routine implementation.
+- Every work package has non-empty `Objective`, `Owner`, `Inputs`, `Outputs`, `Dependencies`, `Validation checkpoint`, and `Completion criteria` cells.
+- Each `WP-*` row links to at least one `VAL-*` checkpoint.
 - The sequence describes what must happen before integration and what can proceed in parallel.
+- Parallelization is allowed only after the first proof or after contracts are stable.
+- Component-order plans such as `schema -> API -> UI -> tests` are insufficient unless each step proves incremental value.
 - Work packages cover every `OBJ-*` and every writable `SURF-*`.
 
 ### Template
 
-| ID | Objective | Owner | Inputs | Outputs | Dependencies | Completion criteria |
-| --- | --- | --- | --- | --- | --- | --- |
-| WP-1 |  |  |  |  |  |  |
+Planning strategy:
+
+Critical path hypothesis:
+
+First proving slice:
+
+Validation cadence:
+
+Deferred completeness:
+
+| ID | Objective | Owner | Inputs | Outputs | Dependencies | Validation checkpoint | Completion criteria |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| WP-1 |  |  |  |  |  | VAL- |  |
 
 Execution sequence:
 
