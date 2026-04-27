@@ -13,7 +13,7 @@ Write the document in this order:
 3. Fill the change surface inventory before defining package boundaries.
 4. Fill agent-focused package decomposition before assigning work packages for code, contract, schema, package, or multi-agent implementation.
 5. After inventorying change surfaces and package boundaries, identify the core value proposition, critical path hypothesis, top unknowns, first proving slice, and sequencing strategy before assigning work packages.
-6. Define milestone gates and their manual verification guides after assigning work packages and before filling controls or validation.
+6. Define milestone gates, due points, and manual verification guides after assigning work packages and before filling controls or validation.
 7. Fill controls before validation, so validation proves the risky claims instead of only confirming happy paths.
 8. Fill rollout, rollback, observability, and handoff before requesting review.
 9. Complete the traceability matrix and final execution gate last.
@@ -66,7 +66,7 @@ Assign stable IDs before review and do not renumber casually after review starts
 
 Use `VAL-*` for proof activities. Use `EVD-*` for the evidence artifacts those activities produce.
 
-Use `MS-*` for hard approval gates. Each milestone shall name the covered work, human verifier, prerequisite evidence, step-by-step manual verification guide, approval decision, and failure path.
+Use `MS-*` for hard approval gates. Each milestone shall name the covered work, due point, human verifier, prerequisite evidence, step-by-step manual verification guide, approval decision, and failure path.
 
 ## Agent-Focused Package Decomposition
 
@@ -116,6 +116,7 @@ Treat milestones as operator-verifiable checkpoints, not schedule labels.
 
 - Write the milestone around the functionality or operational capability being approved.
 - Link each milestone to the `WP-*`, `VAL-*`, `REV-*`, and `EVD-*` rows that prove it.
+- State when approval is due, such as before a later work package starts, before merge, before release, or before completion.
 - Include manual verification steps that a human operator can execute without hidden context.
 - Cover the full functionality encapsulated by the milestone; excluded behavior requires an explicit `N/A` rationale.
 - Record what evidence the verifier must capture and what decision phrase marks approval, rejection, or conditional approval.
@@ -137,6 +138,7 @@ Before requesting review, the author shall be able to answer `yes` to each quest
 - Does every work package trace to approved source authority?
 - Does every applicable work package map to a `PKG-*` boundary with explicit editable paths?
 - Does every work package map to a milestone gate with human verification?
+- Does every milestone state the due point where human approval becomes required?
 - Does every writable surface have an owner and review expectation?
 - Are forbidden dependencies and coupling tripwires explicit enough to keep agents inside their assigned scope?
 - Can another engineer execute the sequence without asking for hidden context?
@@ -148,4 +150,4 @@ Before requesting review, the author shall be able to answer `yes` to each quest
 
 ## Review Handoff
 
-Send reviewers the execution spec, source design or ticket, branch or diff if available, milestone evidence already produced, test evidence already produced, and any deviations from the plan. State the requested decision exactly as one of the allowed decision phrases in section 0.
+Send reviewers the execution spec, source design or ticket, branch or diff if available, milestone evidence already produced for due milestones, test evidence already produced, and any deviations from the plan. State the requested decision exactly as one of the allowed decision phrases in section 0.

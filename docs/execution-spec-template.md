@@ -54,7 +54,7 @@ Use words with specific force:
 - `unknown`: known gap; must include a `Q-*` identifier, owner, due date, and resolution plan
 - `deviation`: approved departure from the execution plan; must include a `DEV-*` identifier, owner, approver, rationale, impact, and evidence
 - `waiver`: approved exception to a review or approval rule; must include a `WVR-*` identifier, approver, waived rule or finding, rationale, boundary or expiry, compensating control, and evidence
-- `milestone gate`: human approval checkpoint that must include an `MS-*` identifier, covered work, verifier, step-by-step manual verification guide, required evidence, approval decision, and failure path
+- `milestone gate`: human approval checkpoint that must include an `MS-*` identifier, covered work, due point, verifier, step-by-step manual verification guide, required evidence, approval decision, and failure path
 - `manual verification guide`: ordered human-operator procedure with observable expected results and evidence capture for the full functionality covered by a milestone gate
 
 Use planning strategy terms with specific meaning:
@@ -522,24 +522,24 @@ Section status:
 ### Required Output
 
 - Milestone gates that define required human approval checkpoints for execution progress, merge, release, or completion.
-- Covered functionality, covered work packages, prerequisites, review gate, required evidence, verifier, approval decision, and failure path for each gate.
+- Covered functionality, covered work packages, due point, prerequisites, review gate, required evidence, verifier, approval decision, and failure path for each gate.
 - Step-by-step manual verification guide for each milestone that covers the full functionality encapsulated by the milestone.
 
 ### Exit Criteria
 
 - At least one `MS-*` row is present.
-- Every milestone row has non-empty `Gate objective`, `Covered work`, `Human verifier`, `Prerequisites`, `Review gate`, `Required evidence`, `Approval decision`, and `Failure path` cells.
+- Every milestone row has non-empty `Gate objective`, `Covered work`, `Due point`, `Human verifier`, `Prerequisites`, `Review gate`, `Required evidence`, `Approval decision`, and `Failure path` cells.
 - Every `MS-*` maps to at least one `WP-*`, one `VAL-*`, one `REV-*`, and one `EVD-*`.
 - Every `MS-*` has at least one manual verification guide step.
 - Manual verification steps are ordered, executable by the named verifier, and include observable expected results.
 - Manual verification covers the full functionality represented by the milestone's `OBJ-*`, `SURF-*`, `PKG-*`, and `WP-*` scope, or records an explicit `N/A` rationale for excluded behavior.
-- No milestone can be approved solely by automated test completion; human verification evidence and approval record are required.
+- No milestone can be approved solely by automated test completion; human verification evidence and approval record are required when the milestone's due point is reached.
 
 ### Template
 
-| ID | Gate objective | Covered work | Human verifier | Prerequisites | Review gate | Required evidence | Approval decision | Failure path |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| MS-1 |  | OBJ- / SURF- / PKG- / WP- |  | VAL- / EVD- | REV- | EVD- | Approve / Reject / Conditional approval |  |
+| ID | Gate objective | Covered work | Due point | Human verifier | Prerequisites | Review gate | Required evidence | Approval decision | Failure path |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| MS-1 |  | OBJ- / SURF- / PKG- / WP- | Before WP- / before merge / before release / before completion |  | VAL- / EVD- | REV- | EVD- | Approve / Reject / Conditional approval |  |
 
 Manual verification guide:
 
@@ -783,7 +783,7 @@ Section status:
 ### Required Output
 
 - Entry gate before execution starts.
-- Milestone approval gate before merge, release, or completion.
+- Milestone gate plan before execution and milestone approval gates before their stated due points.
 - Merge or completion gate before declaring work done.
 - Release gate before activation or deployment.
 - Handoff record after execution.
@@ -792,8 +792,9 @@ Section status:
 
 - `Entry gate`, `Milestone approval gate`, `Completion gate`, `Release gate`, `Handoff record`, and `Section status` fields are present and non-empty.
 - No gate contains vague approval language without named evidence.
-- All blocking dependencies, blocking milestone gates, blocking reviews, required validations, and unresolved `Q-*` items are represented.
-- Every required `MS-*` approval has named verifier evidence or the final readiness state is `Not ready`.
+- All blocking dependencies, blocking reviews, required validations, and unresolved `Q-*` items are represented, and all blocking milestone gates have due points.
+- Every required `MS-*` is fully specified before execution approval: due point, named verifier, manual verification guide, required evidence, approval decision, and failure path.
+- Every required `MS-*` whose due point has arrived has named verifier approval evidence; pending future milestone approvals do not block `Ready to execute` unless the milestone is an entry prerequisite.
 - Final readiness state is one of `Ready to investigate`, `Ready to execute`, `Ready to execute with heightened controls`, `Not ready`, or `Completed`, and it satisfies the readiness semantics below.
 
 Readiness semantics:
@@ -801,9 +802,9 @@ Readiness semantics:
 | State | Allowed when |
 | --- | --- |
 | `Ready to investigate` | Execution level is `E0`, investigation entry gates are satisfied, no required section is `Incomplete`, and any unresolved `Q-*` items are the investigation targets rather than blockers. |
-| `Ready to execute` | Execution level is `E1` or `E2`, the entry gate is satisfied, milestone/completion/release/handoff gates are evidence-based, no required section is `Incomplete`, all blocking dependencies, milestones, and reviews are satisfied, and every `Blocker` or `Major` finding is `Resolved` or validly `Waived by WVR-*`. |
-| `Ready to execute with heightened controls` | Execution level is `E3`, the entry gate is satisfied, milestone/completion/release/handoff gates are evidence-based, no required section is `Incomplete`, all blocking dependencies, milestones, and reviews are satisfied, every `Blocker` or `Major` finding is `Resolved` or validly `Waived by WVR-*`, and heightened controls, independent review, rollback or containment, and waiver approvals are recorded. |
-| `Not ready` | Any required gate is unsatisfied, the execution level is incorrect, a required section is `Incomplete`, a blocking dependency, milestone, or `Q-*` item is unresolved, approval is missing, or any `Blocker` or `Major` finding is still `Open`. |
+| `Ready to execute` | Execution level is `E1` or `E2`, the entry gate is satisfied, milestone/completion/release/handoff gates are evidence-based, all milestones are fully specified, all entry-required milestone approvals are recorded, no required section is `Incomplete`, all blocking dependencies and reviews are satisfied, and every `Blocker` or `Major` finding is `Resolved` or validly `Waived by WVR-*`. |
+| `Ready to execute with heightened controls` | Execution level is `E3`, the entry gate is satisfied, milestone/completion/release/handoff gates are evidence-based, all milestones are fully specified, all entry-required milestone approvals are recorded, no required section is `Incomplete`, all blocking dependencies and reviews are satisfied, every `Blocker` or `Major` finding is `Resolved` or validly `Waived by WVR-*`, and heightened controls, independent review, rollback or containment, and waiver approvals are recorded. |
+| `Not ready` | Any required gate is unsatisfied, the execution level is incorrect, a required section is `Incomplete`, a blocking dependency or `Q-*` item is unresolved, an `MS-*` gate is unspecified, entry-required milestone approval is missing, due milestone approval is missing, or any `Blocker` or `Major` finding is still `Open`. |
 | `Completed` | Approved execution is complete, milestone approvals and validation evidence are recorded, release or containment actions are complete or explicitly `N/A`, and the handoff record is available. |
 
 ### Template

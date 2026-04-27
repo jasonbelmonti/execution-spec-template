@@ -82,11 +82,12 @@ These findings are not waivable:
 - Missing validation for the highest-risk claim.
 - Missing rollback or containment for work that affects live systems.
 - Broken traceability for a critical objective, work package, or high-risk surface.
-- Missing, insufficient, or unapproved milestone gate.
-- Missing manual verification guide, named human verifier, milestone approval evidence, or milestone failure path.
-- Broken milestone traceability between covered work, validation, review, approval, or evidence.
+- Missing or insufficient milestone gate specification.
+- Missing milestone due point, manual verification guide, named human verifier, required milestone approval evidence definition, or milestone failure path.
+- Unapproved milestone gate, or missing named verifier approval evidence, for an `MS-*` whose due point has arrived.
+- Broken milestone traceability between covered work, validation, review, approval requirements, or evidence.
 
-Section 8 milestone approval requirements are hard gates. They shall not be satisfied by `Deferred` status or by a `WVR-*` waiver.
+Section 8 milestone specification requirements and due milestone approval requirements are hard gates. They shall not be satisfied by `Deferred` status or by a `WVR-*` waiver.
 
 All other `Blocker` or `Major` findings may be waived only when the process or template permits `Deferred` treatment, the gap is bounded, the compensating control is explicit, and the final verdict records the `WVR-*` identifier.
 
@@ -167,7 +168,7 @@ Evaluate every section against five quality dimensions:
 | 13. Rollout, Migration, Rollback, and Recovery | Can the change be deployed and recovered safely? |  |  |
 | 14. Observability and Operational Readiness | Can operators detect and respond to failure? |  |  |
 | 15. Risks, Questions, Deviations, and Waivers | Are risks, unknowns, deviations, and waivers honestly represented? |  |  |
-| 16. Execution Traceability Matrix | Is the chain from source to milestone approval and evidence intact? |  |  |
+| 16. Execution Traceability Matrix | Is the chain from source to milestone approval requirements and evidence intact? |  |  |
 | 17. Final Execution Gate | Are entry, milestone, completion, release, and handoff gates evidence-based? |  |  |
 
 ### Structural Blocking Conditions
@@ -177,14 +178,14 @@ Stop the review if any of the following are true:
 - Any required section is `Incomplete`.
 - Source authority is absent or insufficient.
 - Work packages do not cover the stated objectives.
-- Milestone gates are absent, lack manual verification steps, or do not require human approval evidence.
+- Milestone gates are absent, lack due points or manual verification steps, or do not define required human approval evidence.
 - Writable change surfaces lack owners or review expectations.
 - Applicable package boundaries lack ladder levels, public interfaces, forbidden dependencies, editable paths, or validation commands.
 - Reusable package candidates depend on app, UI, route, database, deployment, or product-specific runtime code without a waiver.
 - Validation does not cover the highest-risk claim.
 - Rollout or rollback is absent for work that can affect live systems.
 - A blocking dependency is missing from the final gate.
-- The traceability chain from source to milestone approval and evidence is visibly broken.
+- The traceability chain from source to milestone approval requirements and evidence for due milestones is visibly broken.
 
 ### Structural Output
 
@@ -214,7 +215,7 @@ Score each applicable dimension from `0` to `3`. Use `N/A` only when the corresp
 | Scope control | Are inclusions, exclusions, and escalation rules clear? |
 | Sequence adequacy | Are work packages ordered to prove the critical path early, retire the highest-risk unknowns, and produce validation evidence at each step? |
 | Surface coverage | Are all changed systems, files, data, configs, and contracts represented? |
-| Milestone adequacy | Do milestone gates require human verification, cover their full functionality, and link to evidence, review, and failure paths? |
+| Milestone adequacy | Do milestone gates state due points, require human verification, cover their full functionality, and link to evidence, review, and failure paths? |
 | Package boundary adequacy | Are package levels, public interfaces, forbidden dependencies, editable paths, and validation commands specific enough for isolated agent execution? |
 | Validation adequacy | Does evidence prove the outcome and risky claims? |
 | Review adequacy | Are the right reviewers assigned to the right surfaces? |
@@ -272,7 +273,7 @@ Traceability review confirms that the plan forms an unbroken execution chain.
 - Does every writable `SURF-*` map to one or more `WP-*`, `MS-*`, `REV-*`, and `VAL-*` rows?
 - Does every `WP-*` have validation evidence?
 - Does every `WP-*` map to a milestone gate?
-- Does every `MS-*` map to covered work, manual verification steps, validation evidence, review, and an approval record?
+- Does every `MS-*` map to covered work, manual verification steps, validation evidence path, review path, and an approval path, with an approval record when its due point has arrived?
 - Does every high-risk `RISK-*` map to a control, validation item, release action, or observability signal?
 - Does every blocking dependency and milestone appear in the final execution gate?
 
@@ -287,7 +288,7 @@ Return the document for rework if:
 - Any milestone has no manual verification path, evidence path, review path, or approval path.
 - Any high-risk surface lacks review coverage.
 - Any release action lacks rollback, containment, or `N/A` rationale.
-- The chain from source authority to milestone approval and completion evidence cannot be followed by an independent reviewer.
+- The chain from source authority to milestone approval requirements and completion evidence cannot be followed by an independent reviewer.
 
 ### Traceability Output
 

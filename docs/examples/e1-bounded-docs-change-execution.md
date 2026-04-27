@@ -140,10 +140,10 @@ Section status: Complete
 
 ## 8. Milestone Gates and Manual Verification
 
-| ID | Gate objective | Covered work | Human verifier | Prerequisites | Review gate | Required evidence | Approval decision | Failure path |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| MS-1 | Proving-slice gate: confirm the template and example can express one bounded execution end-to-end before procedure expansion. | OBJ-1 / OBJ-3 / SURF-1 / SURF-4 / WP-1 | Repository owner | VAL-1 and EVD-1 / EVD-3 are available. | REV-1 | EVD-1 / EVD-3 bounded-flow inspection and verifier approval note. | Approve proving slice / Reject proving slice | Return to WP-1 and revise template or example before WP-2 starts. |
-| MS-2 | Final documentation gate: confirm the full artifact set is coherent, traceable, and ready for owner decision. | OBJ-1 / OBJ-2 / OBJ-3 / SURF-1 / SURF-2 / SURF-3 / SURF-4 / WP-1 / WP-2 / WP-3 | Repository owner | MS-1 is approved; VAL-2 / VAL-3 and REV-1 are available. | REV-1 | EVD-1 / EVD-2 / EVD-3 final inspection, REV-1 completion evidence, and verifier approval note. | Approve bounded first draft / Reject bounded first draft / Conditional approval | Record required rework as review finding or follow-up; do not merge or package until resolved. |
+| ID | Gate objective | Covered work | Due point | Human verifier | Prerequisites | Review gate | Required evidence | Approval decision | Failure path |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| MS-1 | Proving-slice gate: confirm the template and example can express one bounded execution end-to-end before procedure expansion. | OBJ-1 / OBJ-3 / SURF-1 / SURF-4 / WP-1 | Before WP-2 starts | Repository owner | VAL-1 and EVD-1 / EVD-3 are available. | REV-1 | EVD-1 / EVD-3 bounded-flow inspection and verifier approval note. | Approve proving slice / Reject proving slice | Return to WP-1 and revise template or example before WP-2 starts. |
+| MS-2 | Final documentation gate: confirm the full artifact set is coherent, traceable, and ready for owner decision. | OBJ-1 / OBJ-2 / OBJ-3 / SURF-1 / SURF-2 / SURF-3 / SURF-4 / WP-1 / WP-2 / WP-3 | Before merge or package completion | Repository owner | MS-1 is approved; VAL-2 / VAL-3 and REV-1 are available. | REV-1 | EVD-1 / EVD-2 / EVD-3 final inspection, REV-1 completion evidence, and verifier approval note. | Approve bounded first draft / Reject bounded first draft / Conditional approval | Record required rework as review finding or follow-up; do not merge or package until resolved. |
 
 Manual verification guide:
 
@@ -254,7 +254,7 @@ Section status: Complete
 
 Entry gate: Repository initialized, project-local worktree branch created, and execution estimate completed; execution is bounded into WP-1 through WP-3 and no merge proceeds without REV-1.
 
-Milestone approval gate: MS-1 and MS-2 repository-owner approval notes are recorded with EVD-1 / EVD-2 / EVD-3; otherwise the final readiness state remains `Not ready`.
+Milestone approval gate: MS-1 and MS-2 are fully specified with due points, repository-owner verifier, manual verification steps, required evidence, approval decisions, and failure paths. MS-1 approval is required before WP-2 starts; MS-2 approval is required before merge or package completion.
 
 Completion gate: Four Markdown files exist, heading inspection passes, and Git status shows documentation-only changes.
 
