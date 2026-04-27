@@ -112,15 +112,25 @@ Section status: N/A
 
 ## 7. Work Packages and Sequencing
 
-| ID | Objective | Owner | Package boundary | Editable paths | Read-only paths | Inputs | Outputs | Dependencies | Validation | Completion criteria |
+Planning strategy: `STRATEGIES.PROGRESSIVE_VALUE` with risk retirement through the first proving slice.
+
+Critical path hypothesis: A controlled execution spec is useful if the template can express one bounded documentation change end-to-end with source authority, scope, work packages, validation, review, rollout, and traceability.
+
+First proving slice: WP-1 proves whether the template and example can jointly express the bounded execution path before expanding authoring or review procedure detail.
+
+Validation cadence: Run heading, traceability, and docs-only inspections after each work package before continuing.
+
+Deferred completeness: Skill packaging, additional examples, and publication decisions remain out of scope until the bounded documentation path is proven.
+
+| ID | Objective | Owner | Package boundary | Editable paths | Read-only paths | Inputs | Outputs | Dependencies | Validation checkpoint | Completion criteria |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| WP-1 | Draft execution template. | Codex | N/A: docs-only. | `docs/execution-spec-template.md` | `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md` | SRC-1 / SRC-2 | SURF-1 | None | VAL-1 / VAL-2 / VAL-3 | Template includes levels, vocabulary, applicability, sections, and final gate. |
-| WP-2 | Draft authoring and review procedures. | Codex | N/A: docs-only. | `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md` | `docs/execution-spec-template.md` | SURF-1 | SURF-2 / SURF-3 | WP-1 | VAL-1 / VAL-2 / VAL-3 | Procedures reference the template sections and decision model. |
-| WP-3 | Draft bounded example. | Codex | N/A: docs-only. | `docs/examples/e1-bounded-docs-change-execution.md` | `docs/execution-spec-template.md`, `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md` | SURF-1 / SURF-2 / SURF-3 | SURF-4 | WP-1 / WP-2 | VAL-1 / VAL-2 / VAL-3 | Example uses the template vocabulary and shows traceability. |
+| WP-1 | Prove the template can express one bounded execution end-to-end. | Codex | N/A: docs-only. | `docs/execution-spec-template.md`, `docs/examples/e1-bounded-docs-change-execution.md` | `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md` | SRC-1 / SRC-2 / OBJ-1 / SURF-1 / SURF-4 | SURF-1 / SURF-4 | None | VAL-1 | Template and example jointly show source authority, scope, work packages, validation, review, rollout, and traceability for one bounded docs change. |
+| WP-2 | Expand the authoring and review docs around the proven flow. | Codex | N/A: docs-only. | `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md` | `docs/execution-spec-template.md`, `docs/examples/e1-bounded-docs-change-execution.md` | WP-1 / SURF-1 / SURF-4 | SURF-2 / SURF-3 | WP-1 | VAL-2 | Procedures reference the proven template sections, review dimensions, and decision model without adding new scope. |
+| WP-3 | Tighten traceability, validation, and review gates across the doc set. | Codex | N/A: docs-only. | `docs/execution-spec-template.md`, `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md`, `docs/examples/e1-bounded-docs-change-execution.md` | None | WP-1 / WP-2 / SURF-1 / SURF-2 / SURF-3 / SURF-4 | SURF-1 / SURF-2 / SURF-3 / SURF-4 | WP-1 / WP-2 | VAL-3 | Identifiers, headings, validation items, review gates, and Git status show a coherent documentation-only execution artifact. |
 
-Execution sequence: Complete WP-1, then WP-2, then WP-3, then inspect all headings and Git status.
+Execution sequence: Complete WP-1 first, then use its evidence to complete WP-2, then complete WP-3 and inspect headings, traceability, and Git status.
 
-Parallelization rules: No parallel authorship is required for this bounded first draft.
+Parallelization rules: No parallel authorship is required for this bounded first draft. WP-2 and WP-3 may be split across implementers only after WP-1 proves the bounded flow and section contracts are stable.
 
 Integration points: The example shall use section names and identifiers from the template.
 
@@ -154,9 +164,9 @@ Section status: N/A
 
 | ID | Method | Claim verified | Timing | Owner | Evidence artifact |
 | --- | --- | --- | --- | --- | --- |
-| VAL-1 | Inspection | Four intended Markdown files exist. | Pre-merge | Codex | EVD-1 file listing |
-| VAL-2 | Inspection | Headings are coherent and reviewable. | Pre-merge | Codex | EVD-2 heading listing |
-| VAL-3 | Inspection | Git status shows documentation-only changes. | Pre-merge | Codex | EVD-3 Git status |
+| VAL-1 | Inspection | Template and example express one bounded execution path end-to-end. | After WP-1 / Pre-merge | Codex | EVD-1 / EVD-3 bounded-flow inspection |
+| VAL-2 | Inspection | Authoring and review procedures align to the proven flow. | After WP-2 / Pre-merge | Codex | EVD-2 heading and reference inspection |
+| VAL-3 | Inspection | Traceability, review gates, headings, and Git status remain coherent and documentation-only. | After WP-3 / Pre-merge | Codex | EVD-1 / EVD-2 / EVD-3 final inspection |
 
 Section status: Complete
 
@@ -215,9 +225,9 @@ Section status: Complete
 
 | Source or objective | Change surfaces | Package boundaries | Work packages | Controls | Validation | Review | Release or ops | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| SRC-1 / OBJ-1 | SURF-1 | N/A: docs-only. | WP-1 | CTRL-3 | VAL-1 / VAL-2 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-2 |
-| SRC-1 / OBJ-2 | SURF-2 / SURF-3 | N/A: docs-only. | WP-2 | CTRL-3 | VAL-1 / VAL-2 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-2 |
-| SRC-2 / OBJ-3 | SURF-4 | N/A: docs-only. | WP-3 | CTRL-1 | VAL-1 / VAL-2 / VAL-3 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-3 |
+| SRC-1 / OBJ-1 | SURF-1 | N/A: docs-only. | WP-1 / WP-3 | CTRL-3 | VAL-1 / VAL-3 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-3 |
+| SRC-1 / OBJ-2 | SURF-2 / SURF-3 | N/A: docs-only. | WP-2 / WP-3 | CTRL-3 | VAL-2 / VAL-3 | REV-1 | REL-1 / REL-2 | EVD-2 / EVD-3 |
+| SRC-2 / OBJ-3 | SURF-4 | N/A: docs-only. | WP-1 / WP-3 | CTRL-1 / CTRL-3 | VAL-1 / VAL-3 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-3 |
 
 Section status: Complete
 

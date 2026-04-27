@@ -12,11 +12,26 @@ Write the document in this order:
 2. Fill Document Control, section 0, and Layer 1 before drafting work packages.
 3. Fill the change surface inventory before defining package boundaries.
 4. Fill agent-focused package decomposition before assigning work packages for code, contract, schema, package, or multi-agent implementation.
-5. Fill controls before validation, so validation proves the risky claims instead of only confirming happy paths.
-6. Fill rollout, rollback, observability, and handoff before requesting review.
-7. Complete the traceability matrix and final execution gate last.
+5. After inventorying change surfaces and package boundaries, identify the core value proposition, critical path hypothesis, top unknowns, first proving slice, and sequencing strategy before assigning work packages.
+6. Fill controls before validation, so validation proves the risky claims instead of only confirming happy paths.
+7. Fill rollout, rollback, observability, and handoff before requesting review.
+8. Complete the traceability matrix and final execution gate last.
 
 Do not use work packages to smuggle in new product, design, or operational decisions. If execution reveals a missing decision, record a `Q-*` question or `DEV-*` deviation and escalate it.
+
+## Sequencing Strategy
+
+Default to `STRATEGIES.RISK_RETIREMENT` when unknowns, dependencies, migrations, interfaces, or operational behavior could invalidate the plan.
+
+Default to `STRATEGIES.PROGRESSIVE_VALUE` when the path is understood and the safest execution shape is a series of independently reviewable slices.
+
+Use `CONTRACT_FIRST` when multiple implementers, repositories, services, or clients need stable schemas, APIs, events, permissions, fixtures, or document structure before parallel execution.
+
+Use `OPERABILITY_FIRST` when observability, rollback, support procedure, migration safety, or incident response capability must exist before feature completion.
+
+Use `SPIKE_THEN_SLICE` when a bounded investigation must retire an unknown before the author can define executable work packages.
+
+Avoid sequencing by component layer alone. A plan ordered as `schema -> API -> UI -> tests` is acceptable only when each step identifies the evidence it produces and the decision it unlocks.
 
 ## Execution Level Selection
 
