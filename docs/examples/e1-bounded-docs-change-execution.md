@@ -104,7 +104,13 @@ Section status: Complete
 
 Section status: Complete
 
-## 6. Work Packages and Sequencing
+## 6. Agent-Focused Package Decomposition
+
+N/A rationale: This example documents a bounded documentation-only change. It changes no code, contract, schema, package, or multi-agent implementation surface, so package decomposition is not applicable.
+
+Section status: N/A
+
+## 7. Work Packages and Sequencing
 
 Planning strategy: `STRATEGIES.PROGRESSIVE_VALUE` with risk retirement through the first proving slice.
 
@@ -116,21 +122,23 @@ Validation cadence: Run heading, traceability, and docs-only inspections after e
 
 Deferred completeness: Skill packaging, additional examples, and publication decisions remain out of scope until the bounded documentation path is proven.
 
-| ID | Objective | Owner | Inputs | Outputs | Dependencies | Milestone gate | Validation checkpoint | Completion criteria |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| WP-1 | Prove the template can express one bounded execution end-to-end. | Codex | SRC-1 / SRC-2 / OBJ-1 / SURF-1 / SURF-4 | SURF-1 / SURF-4 | None | MS-1 / MS-2 | VAL-1 | Template and example jointly show source authority, scope, work packages, validation, review, rollout, and traceability for one bounded docs change. |
-| WP-2 | Expand the authoring and review docs around the proven flow. | Codex | WP-1 / SURF-1 / SURF-4 | SURF-2 / SURF-3 | WP-1 | MS-2 | VAL-2 | Procedures reference the proven template sections, review dimensions, and decision model without adding new scope. |
-| WP-3 | Tighten traceability, validation, and review gates across the doc set. | Codex | WP-1 / WP-2 / SURF-1 / SURF-2 / SURF-3 / SURF-4 | SURF-1 / SURF-2 / SURF-3 / SURF-4 | WP-1 / WP-2 | MS-2 | VAL-3 | Identifiers, headings, validation items, review gates, and Git status show a coherent documentation-only execution artifact. |
+| ID | Objective | Owner | Package boundary | Editable paths | Read-only paths | Inputs | Outputs | Dependencies | Milestone gate | Validation checkpoint | Completion criteria |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| WP-1 | Prove the template can express one bounded execution end-to-end. | Codex | N/A: docs-only. | `docs/execution-spec-template.md`, `docs/examples/e1-bounded-docs-change-execution.md` | `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md` | SRC-1 / SRC-2 / OBJ-1 / SURF-1 / SURF-4 | SURF-1 / SURF-4 | None | MS-1 / MS-2 | VAL-1 | Template and example jointly show source authority, scope, work packages, validation, review, rollout, and traceability for one bounded docs change. |
+| WP-2 | Expand the authoring and review docs around the proven flow. | Codex | N/A: docs-only. | `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md` | `docs/execution-spec-template.md`, `docs/examples/e1-bounded-docs-change-execution.md` | WP-1 / SURF-1 / SURF-4 | SURF-2 / SURF-3 | WP-1 | MS-2 | VAL-2 | Procedures reference the proven template sections, review dimensions, and decision model without adding new scope. |
+| WP-3 | Tighten traceability, validation, and review gates across the doc set. | Codex | N/A: docs-only. | `docs/execution-spec-template.md`, `docs/execution-spec-authoring-guide.md`, `docs/execution-spec-review-process.md`, `docs/examples/e1-bounded-docs-change-execution.md` | None | WP-1 / WP-2 / SURF-1 / SURF-2 / SURF-3 / SURF-4 | SURF-1 / SURF-2 / SURF-3 / SURF-4 | WP-1 / WP-2 | MS-2 | VAL-3 | Identifiers, headings, validation items, review gates, and Git status show a coherent documentation-only execution artifact. |
 
 Execution sequence: Complete WP-1 first, then use its evidence to complete WP-2, then complete WP-3 and inspect headings, traceability, and Git status.
 
-Parallelization rules: No parallel authorship is required for this bounded first draft. WP-2 and WP-3 may be split across implementers only after WP-1 proves the bounded flow and section contracts are stable.
+Parallelization rules: No parallel authorship is required for this bounded first draft. WP-2 and WP-3 may be split across implementers only after WP-1 proves the bounded flow and section contracts are stable, and only if the shared editable paths are either serialized or assigned to one owner at a time.
 
 Integration points: The example shall use section names and identifiers from the template.
 
+Coordination triggers: If WP-2 and WP-3 are split across implementers, edits to `docs/execution-spec-authoring-guide.md` and `docs/execution-spec-review-process.md` require a named handoff point before WP-3 begins tightening those files, or those files shall remain editable by only one implementer while the other implementer treats them as read-only.
+
 Section status: Complete
 
-## 7. Milestone Gates and Manual Verification
+## 8. Milestone Gates and Manual Verification
 
 | ID | Gate objective | Covered work | Human verifier | Prerequisites | Review gate | Required evidence | Approval decision | Failure path |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -144,12 +152,12 @@ Manual verification guide:
 | MV-1 | MS-1 | Inspect the template and example section sequence from source authority through final gate. | The bounded example can be followed end-to-end without hidden decisions. | EVD-1 / EVD-3 |
 | MV-2 | MS-1 | Inspect WP-1, VAL-1, and the example traceability row for the proving slice. | WP-1 produces evidence that can approve or reject the critical path before WP-2 begins. | EVD-1 / EVD-3 |
 | MV-3 | MS-2 | Inspect authoring and review procedure references to the template sections and decision model. | Procedures reinforce the proven flow and do not introduce conflicting approval rules. | EVD-2 |
-| MV-4 | MS-2 | Trace each objective through change surface, work package, milestone, validation, review, release action, and evidence. | Every objective has an unbroken chain to owner-verifiable evidence. | EVD-1 / EVD-2 / EVD-3 |
+| MV-4 | MS-2 | Trace each objective through change surface, package boundary, work package, milestone, validation, review, release action, and evidence. | Every objective has an unbroken chain to owner-verifiable evidence. | EVD-1 / EVD-2 / EVD-3 |
 | MV-5 | MS-2 | Confirm Git status and changed-file list. | Only the four intended Markdown files are changed. | EVD-3 |
 
 Section status: Complete
 
-## 8. Execution Controls and Drift Management
+## 9. Execution Controls and Drift Management
 
 | ID | Trigger | Required action | Owner | Evidence |
 | --- | --- | --- | --- | --- |
@@ -163,7 +171,7 @@ Pause or escalation conditions: Pause if the repository owner wants execution sp
 
 Section status: Complete
 
-## 9. Data, Schema, Config, and Contract Handling
+## 10. Data, Schema, Config, and Contract Handling
 
 N/A rationale: Checked surfaces are documentation files only; no data, schema, config, API, event, permission, or contract changes are in scope.
 
@@ -171,7 +179,7 @@ Section status: N/A
 
 ## Layer 3: Validation, Release, and Handoff
 
-## 10. Validation and Evidence Plan
+## 11. Validation and Evidence Plan
 
 | ID | Method | Claim verified | Timing | Owner | Evidence artifact |
 | --- | --- | --- | --- | --- | --- |
@@ -181,7 +189,7 @@ Section status: N/A
 
 Section status: Complete
 
-## 11. Review Plan
+## 12. Review Plan
 
 | ID | Reviewer | Review scope | Blocking? | Completion evidence |
 | --- | --- | --- | --- | --- |
@@ -191,7 +199,7 @@ Approval conditions: The first draft is acceptable when the repository owner agr
 
 Section status: Complete
 
-## 12. Rollout, Migration, Rollback, and Recovery
+## 13. Rollout, Migration, Rollback, and Recovery
 
 | ID | Action | Timing | Owner | Abort trigger | Evidence |
 | --- | --- | --- | --- | --- | --- |
@@ -204,7 +212,7 @@ Recovery limit: No production recovery is required; recovery is limited to Git b
 
 Section status: Complete
 
-## 13. Observability and Operational Readiness
+## 14. Observability and Operational Readiness
 
 N/A rationale: Documentation-only first draft does not run in production or require operational signals.
 
@@ -214,7 +222,7 @@ Monitoring window: N/A.
 
 Section status: N/A
 
-## 14. Risks, Questions, Deviations, and Waivers
+## 15. Risks, Questions, Deviations, and Waivers
 
 Risks:
 
@@ -232,17 +240,17 @@ Approved waivers: None; rationale: no review or approval rule has been waived.
 
 Section status: Complete
 
-## 15. Execution Traceability Matrix
+## 16. Execution Traceability Matrix
 
-| Source or objective | Change surfaces | Work packages | Milestones | Controls | Validation | Review | Release or ops | Evidence |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| SRC-1 / OBJ-1 | SURF-1 | WP-1 / WP-3 | MS-1 / MS-2 | CTRL-3 | VAL-1 / VAL-3 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-3 |
-| SRC-1 / OBJ-2 | SURF-2 / SURF-3 | WP-2 / WP-3 | MS-2 | CTRL-3 | VAL-2 / VAL-3 | REV-1 | REL-1 / REL-2 | EVD-2 / EVD-3 |
-| SRC-2 / OBJ-3 | SURF-4 | WP-1 / WP-3 | MS-1 / MS-2 | CTRL-1 / CTRL-3 | VAL-1 / VAL-3 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-3 |
+| Source or objective | Change surfaces | Package boundaries | Work packages | Milestones | Controls | Validation | Review | Release or ops | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| SRC-1 / OBJ-1 | SURF-1 | N/A: docs-only. | WP-1 / WP-3 | MS-1 / MS-2 | CTRL-3 | VAL-1 / VAL-3 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-3 |
+| SRC-1 / OBJ-2 | SURF-2 / SURF-3 | N/A: docs-only. | WP-2 / WP-3 | MS-2 | CTRL-3 | VAL-2 / VAL-3 | REV-1 | REL-1 / REL-2 | EVD-2 / EVD-3 |
+| SRC-2 / OBJ-3 | SURF-4 | N/A: docs-only. | WP-1 / WP-3 | MS-1 / MS-2 | CTRL-1 / CTRL-3 | VAL-1 / VAL-3 | REV-1 | REL-1 / REL-2 | EVD-1 / EVD-3 |
 
 Section status: Complete
 
-## 16. Final Execution Gate
+## 17. Final Execution Gate
 
 Entry gate: Repository initialized, project-local worktree branch created, and execution estimate completed; execution is bounded into WP-1 through WP-3 and no merge proceeds without REV-1.
 

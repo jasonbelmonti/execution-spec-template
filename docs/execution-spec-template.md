@@ -8,7 +8,7 @@ This document is a controlled execution artifact. It shall answer six questions 
 
 1. What approved outcome, ticket, or design is being executed?
 2. What work is in scope, out of scope, and blocked by dependencies?
-3. What milestone gates, change surfaces, work packages, and sequencing will produce the outcome?
+3. What milestone gates, change surfaces, package boundaries, work packages, and sequencing will produce the outcome?
 4. What controls will prevent unsafe drift during execution?
 5. What evidence and manual verification will prove the work is complete and fit to ship?
 6. How will the change be reviewed, deployed, monitored, rolled back, and handed off?
@@ -79,6 +79,7 @@ Assign stable identifiers and reuse them throughout the document:
 - `ASM-*` for assumptions
 - `DEP-*` for dependencies and sequencing blockers
 - `SURF-*` for change surfaces, modules, systems, or repositories
+- `PKG-*` for package, module, or library boundaries intended to constrain agent execution
 - `WP-*` for work packages
 - `MS-*` for milestone gates and human verification checkpoints
 - `CTRL-*` for execution controls and safeguards
@@ -123,17 +124,18 @@ Do not leave blanks. If something is unknown, write `unknown` and manage it expl
 | 3. Ownership, Roles, and Decision Points | Required | Required | Required | Required |
 | 4. Constraints, Assumptions, and Dependencies | Required | Required | Required | Required |
 | 5. Change Surface Inventory | Required if any system, repo, document, data, or config changes | Required | Required | Required |
-| 6. Work Packages and Sequencing | Required | Required | Required | Required |
-| 7. Milestone Gates and Manual Verification | Required | Required | Required | Required |
-| 8. Execution Controls and Drift Management | Required | Required | Required | Required |
-| 9. Data, Schema, Config, and Contract Handling | Required if affected | Required if affected; otherwise `N/A` with rationale | Required if affected | Required if affected |
-| 10. Validation and Evidence Plan | Required | Required | Required | Required |
-| 11. Review Plan | Required | Required | Required | Required |
-| 12. Rollout, Migration, Rollback, and Recovery | Required if anything ships, deploys, migrates, or affects live operation | Required | Required | Required |
-| 13. Observability and Operational Readiness | Required if anything runs or can fail after delivery | Required if production-facing; otherwise `N/A` with rationale | Required | Required |
-| 14. Risks, Questions, Deviations, and Waivers | Required | Required | Required | Required |
-| 15. Execution Traceability Matrix | Required | Required | Required | Required |
-| 16. Final Execution Gate | Required | Required | Required | Required |
+| 6. Agent-Focused Package Decomposition | Required if code, contracts, schemas, packages, or multi-agent implementation are affected; otherwise `N/A` with rationale | Required if code, contracts, schemas, packages, or multi-agent implementation are affected; otherwise `N/A` with rationale | Required if code, contracts, schemas, packages, or multi-agent implementation are affected; otherwise `N/A` with rationale | Required if code, contracts, schemas, packages, or multi-agent implementation are affected; otherwise `N/A` with rationale |
+| 7. Work Packages and Sequencing | Required | Required | Required | Required |
+| 8. Milestone Gates and Manual Verification | Required | Required | Required | Required |
+| 9. Execution Controls and Drift Management | Required | Required | Required | Required |
+| 10. Data, Schema, Config, and Contract Handling | Required if affected | Required if affected; otherwise `N/A` with rationale | Required if affected | Required if affected |
+| 11. Validation and Evidence Plan | Required | Required | Required | Required |
+| 12. Review Plan | Required | Required | Required | Required |
+| 13. Rollout, Migration, Rollback, and Recovery | Required if anything ships, deploys, migrates, or affects live operation | Required | Required | Required |
+| 14. Observability and Operational Readiness | Required if anything runs or can fail after delivery | Required if production-facing; otherwise `N/A` with rationale | Required | Required |
+| 15. Risks, Questions, Deviations, and Waivers | Required | Required | Required | Required |
+| 16. Execution Traceability Matrix | Required | Required | Required | Required |
+| 17. Final Execution Gate | Required | Required | Required | Required |
 
 ## Document Control
 
@@ -280,7 +282,7 @@ Section status:
 - At least one `CON-*`, `ASM-*`, or `DEP-*` row is present.
 - Every row has non-empty `Type`, `Statement`, `Owner`, and `Validation or resolution plan` cells.
 - Every `DEP-*` row identifies whether it is blocking or non-blocking.
-- Any blocking dependency appears in section 6 sequencing or section 16 entry gate.
+- Any blocking dependency appears in section 7 sequencing or section 17 entry gate.
 
 ### Template
 
@@ -316,14 +318,162 @@ Section status:
 
 Section status:
 
-## 6. Work Packages and Sequencing
+## 6. Agent-Focused Package Decomposition
+
+### Required Output
+
+- Package ladder classification for each proposed package, module, or reusable unit.
+- Boundary card for every `PKG-*` entry.
+- Explicit dependency direction rules, forbidden dependencies, state boundary, and agent edit boundary.
+- Reuse candidates and promotion blockers.
+- Coupling tripwires that require decomposition revision before or during execution.
+
+### Package Ladder
+
+Classify each proposed unit at exactly one level.
+
+| Level | Name | Use when | Must not use when | Required evidence |
+| --- | --- | --- | --- | --- |
+| 0 | Local function or file | Logic is used in one place and has no stable boundary. | Another package, feature, or agent needs to depend on it. | Caller is local and obvious. |
+| 1 | Internal module | Logic spans multiple files but is owned by one feature or system and does not need isolated agent ownership. | It needs independent build, test, version, or agent ownership. | Module has a clear folder, local tests where applicable, and no circular imports. |
+| 2 | Internal agent-owned package | Multiple features/packages need it, or an app-specific feature/module needs isolated agent ownership. | Cross-project reuse is intended, dependencies cannot be declared, or validation cannot be scoped below the full application. | Package/module has public exports or declared entry points, scoped validation, explicit dependencies, and no private deep imports from peer packages. |
+| 3 | Reusable package candidate | Logic is project-agnostic and plausibly useful across repositories. | Reuse requires copying app assumptions, env vars, schema details, or framework-specific behavior. | Package has a narrow API, no app imports, and documented promotion blockers. |
+| 4 | Shared or published package | Cross-project consumption is intended and compatibility guarantees are required. | Ownership, versioning, release notes, or backwards compatibility policy is unclear. | Package has versioning, changelog, CI, docs, and an owning maintainer or team. |
+
+### Promotion Rules
+
+A unit may move from level 1 to level 2 only when all conditions are true:
+
+- At least two callers, two agent workstreams, or one app-specific feature/module requiring isolated ownership needs the unit.
+- The public API can be described without referencing private implementation files.
+- The package can be tested without running the full application.
+- Dependencies are declared explicitly and do not require private deep imports, circular access, or undeclared shared state.
+
+A unit may move from level 2 to level 3 only when all conditions are true:
+
+- It contains no product-specific routes, schemas, tenants, feature flags, UI assumptions, or deployment assumptions.
+- Configuration is passed in explicitly.
+- External side effects are abstracted behind interfaces.
+- Reuse would not require copying unrelated application code.
+
+A unit may move from level 3 to level 4 only when all conditions are true:
+
+- Versioning and compatibility policy are defined.
+- Public API docs exist.
+- Release and ownership process exists.
+- Breaking-change handling is defined.
+
+### Exit Criteria
+
+- Every code, contract, schema, package, or multi-agent implementation surface has either a `PKG-*` row or an `N/A` rationale.
+- Every `PKG-*` row has a single ladder level and non-empty `Unit`, `Mission`, `Public interface`, `Validation command`, and `Promotion blockers` cells.
+- Every `PKG-*` entry has a boundary card with non-empty `Owns`, `Does not own`, `Allowed dependencies`, `Forbidden dependencies`, `State boundary`, `Agent editable paths`, and `Agent read-only paths` fields.
+- Every work package in section 7 maps to one or more `PKG-*` rows or explains why package decomposition is not applicable.
+- No `PKG-*` at level 3 or higher imports application, route, UI, database, deployment, or product-specific runtime code.
+- Coupling tripwires are stated and have required actions in section 9 controls when material.
+
+### Template
+
+Decomposition mission:
+
+| ID | Unit | Ladder level | Mission | Public interface | Validation command | Promotion blockers |
+| --- | --- | --- | --- | --- | --- | --- |
+| PKG-1 |  | 0 / 1 / 2 / 3 / 4 |  |  |  |  |
+
+Boundary card for every `PKG-*` entry:
+
+```md
+### Package Boundary Card: PKG-*
+
+Ladder level:
+
+Mission:
+
+Owns:
+- Files/directories:
+- Concepts:
+- Runtime responsibilities:
+
+Does not own:
+- Explicitly excluded behavior:
+- Responsibilities delegated elsewhere:
+
+Public interface:
+- Exported types:
+- Exported functions/classes/components:
+- Events/messages/contracts:
+- CLI/API surface:
+
+Allowed dependencies:
+- May import:
+- May call:
+- May read configuration from:
+
+Forbidden dependencies:
+- Must not import:
+- Must not call:
+- Must not know about:
+
+State boundary:
+- Owns state:
+- Reads state:
+- Mutates state:
+- Persistence responsibility:
+
+Agent ownership boundary:
+- Agent editable paths:
+- Agent read-only paths:
+- Required coordination before editing:
+
+Validation command:
+
+Promotion blockers:
+```
+
+Dependency direction rules:
+
+- Allowed direction:
+- Prohibited imports:
+- Allowed cross-boundary communication:
+- Disallowed cross-boundary communication:
+
+State boundary rules:
+
+- Package-owned state:
+- Package-read state:
+- Package-mutated state:
+- Persistence ownership:
+
+Reusable package candidates:
+
+| Candidate | Current level | Reuse rationale | Required decoupling | Promotion trigger |
+| --- | --- | --- | --- | --- |
+|  |  |  |  |  |
+
+Coupling tripwires:
+
+- A package requires knowledge of another package's internal file layout.
+- Two packages must usually change together for one feature.
+- A reusable candidate imports app, route, UI, database, deployment, or product-specific runtime code.
+- Business rules live primarily in UI components, request handlers, scripts, or integration glue.
+- A utility package collects unrelated behavior without a single mission.
+- Package validation requires the full application when package-level validation should be possible.
+- Types are shared by copying instead of declared public exports or contract packages.
+- Separate agents must edit the same files to complete nominally separate work packages.
+
+N/A rationale:
+
+Section status:
+
+## 7. Work Packages and Sequencing
 
 ### Required Output
 
 - Planning preamble that states the sequencing strategy, critical path hypothesis, first proving slice, validation cadence, and deferred completeness.
 - Work packages with objective, owner, inputs, outputs, dependencies, milestone gate, validation checkpoint, and completion criteria.
 - Execution order, parallelization constraints, and integration points.
-- File or module ownership if multiple implementers are involved.
+- Package boundary, editable paths, read-only paths, and validation checkpoint for each work package.
+- Coordination triggers for public interface, cross-package, or shared-file changes.
 
 ### Exit Criteria
 
@@ -331,13 +481,15 @@ Section status:
 - Planning preamble fields are present and non-empty.
 - The first work package proves or invalidates the critical path hypothesis.
 - High-risk unknowns are retired before routine implementation.
-- Every work package has non-empty `Objective`, `Owner`, `Inputs`, `Outputs`, `Dependencies`, `Milestone gate`, `Validation checkpoint`, and `Completion criteria` cells.
+- Every work package has non-empty `Objective`, `Owner`, `Package boundary`, `Editable paths`, `Read-only paths`, `Inputs`, `Outputs`, `Dependencies`, `Milestone gate`, `Validation checkpoint`, and `Completion criteria` cells.
 - Each `WP-*` row links to at least one `MS-*` milestone gate.
 - Each `WP-*` row links to at least one `VAL-*` checkpoint.
 - The sequence describes what must happen before integration and what can proceed in parallel.
 - Parallelization is allowed only after the first proof or after contracts are stable.
 - Component-order plans such as `schema -> API -> UI -> tests` are insufficient unless each step proves incremental value.
 - Work packages cover every `OBJ-*` and every writable `SURF-*`.
+- Every work package maps to a `PKG-*` boundary when section 6 applies.
+- If two work packages share editable paths, the sequence names the coordination point before execution starts.
 
 ### Template
 
@@ -351,9 +503,9 @@ Validation cadence:
 
 Deferred completeness:
 
-| ID | Objective | Owner | Inputs | Outputs | Dependencies | Milestone gate | Validation checkpoint | Completion criteria |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| WP-1 |  |  |  |  |  | MS- | VAL- |  |
+| ID | Objective | Owner | Package boundary | Editable paths | Read-only paths | Inputs | Outputs | Dependencies | Milestone gate | Validation checkpoint | Completion criteria |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| WP-1 |  |  | PKG-1 / N/A with rationale |  |  |  |  |  | MS- | VAL- |  |
 
 Execution sequence:
 
@@ -361,9 +513,11 @@ Parallelization rules:
 
 Integration points:
 
+Coordination triggers:
+
 Section status:
 
-## 7. Milestone Gates and Manual Verification
+## 8. Milestone Gates and Manual Verification
 
 ### Required Output
 
@@ -378,14 +532,14 @@ Section status:
 - Every `MS-*` maps to at least one `WP-*`, one `VAL-*`, one `REV-*`, and one `EVD-*`.
 - Every `MS-*` has at least one manual verification guide step.
 - Manual verification steps are ordered, executable by the named verifier, and include observable expected results.
-- Manual verification covers the full functionality represented by the milestone's `OBJ-*`, `SURF-*`, and `WP-*` scope, or records an explicit `N/A` rationale for excluded behavior.
+- Manual verification covers the full functionality represented by the milestone's `OBJ-*`, `SURF-*`, `PKG-*`, and `WP-*` scope, or records an explicit `N/A` rationale for excluded behavior.
 - No milestone can be approved solely by automated test completion; human verification evidence and approval record are required.
 
 ### Template
 
 | ID | Gate objective | Covered work | Human verifier | Prerequisites | Review gate | Required evidence | Approval decision | Failure path |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| MS-1 |  | OBJ- / SURF- / WP- |  | VAL- / EVD- | REV- | EVD- | Approve / Reject / Conditional approval |  |
+| MS-1 |  | OBJ- / SURF- / PKG- / WP- |  | VAL- / EVD- | REV- | EVD- | Approve / Reject / Conditional approval |  |
 
 Manual verification guide:
 
@@ -395,7 +549,7 @@ Manual verification guide:
 
 Section status:
 
-## 8. Execution Controls and Drift Management
+## 9. Execution Controls and Drift Management
 
 ### Required Output
 
@@ -422,7 +576,7 @@ Pause or escalation conditions:
 
 Section status:
 
-## 9. Data, Schema, Config, and Contract Handling
+## 10. Data, Schema, Config, and Contract Handling
 
 ### Required Output
 
@@ -449,7 +603,7 @@ Section status:
 
 ## Layer 3: Validation, Release, and Handoff
 
-## 10. Validation and Evidence Plan
+## 11. Validation and Evidence Plan
 
 ### Required Output
 
@@ -472,7 +626,7 @@ Section status:
 
 Section status:
 
-## 11. Review Plan
+## 12. Review Plan
 
 ### Required Output
 
@@ -497,7 +651,7 @@ Approval conditions:
 
 Section status:
 
-## 12. Rollout, Migration, Rollback, and Recovery
+## 13. Rollout, Migration, Rollback, and Recovery
 
 ### Required Output
 
@@ -525,7 +679,7 @@ Recovery limit:
 
 Section status:
 
-## 13. Observability and Operational Readiness
+## 14. Observability and Operational Readiness
 
 ### Required Output
 
@@ -554,7 +708,7 @@ N/A rationale:
 
 Section status:
 
-## 14. Risks, Questions, Deviations, and Waivers
+## 15. Risks, Questions, Deviations, and Waivers
 
 ### Required Output
 
@@ -599,16 +753,17 @@ Approved waivers:
 
 Section status:
 
-## 15. Execution Traceability Matrix
+## 16. Execution Traceability Matrix
 
 ### Required Output
 
-- Mapping from source authority to objectives, change surfaces, work packages, milestones, validation, review, release, and evidence.
+- Mapping from source authority to objectives, change surfaces, package boundaries, work packages, milestones, validation, review, release, and evidence.
 - Explicit coverage for every objective and high-risk item.
 
 ### Exit Criteria
 
 - Every `SRC-*` and `OBJ-*` appears in the matrix.
+- Every applicable `PKG-*` maps to at least one `SURF-*`, `WP-*`, `VAL-*`, and `REV-*`.
 - Every writable `SURF-*` maps to at least one `WP-*`, `MS-*`, `VAL-*`, and `REV-*`.
 - Every `WP-*` maps to at least one `OBJ-*`, one `MS-*`, and one `VAL-*`.
 - Every `MS-*` maps to at least one `WP-*`, one `VAL-*`, one `REV-*`, and one `EVD-*`.
@@ -617,13 +772,13 @@ Section status:
 
 ### Template
 
-| Source or objective | Change surfaces | Work packages | Milestones | Controls | Validation | Review | Release or ops | Evidence |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| SRC-1 / OBJ-1 | SURF-1 | WP-1 | MS-1 | CTRL-1 | VAL-1 | REV-1 | REL-1 / OBS-1 | EVD-1 |
+| Source or objective | Change surfaces | Package boundaries | Work packages | Milestones | Controls | Validation | Review | Release or ops | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| SRC-1 / OBJ-1 | SURF-1 | PKG-1 | WP-1 | MS-1 | CTRL-1 | VAL-1 | REV-1 | REL-1 / OBS-1 | EVD-1 |
 
 Section status:
 
-## 16. Final Execution Gate
+## 17. Final Execution Gate
 
 ### Required Output
 
