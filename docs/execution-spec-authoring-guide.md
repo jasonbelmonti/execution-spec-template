@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This guide is the author-facing operating procedure for writing an execution specification. The template defines the artifact. The review process defines approval control. This guide explains how to draft an execution plan without skipping source authority, sequencing, validation, or release control.
+This guide is the author-facing operating procedure for writing an execution specification. The template defines the artifact. The review process defines approval control. This guide explains how to draft an execution plan without skipping source authority, sequencing, milestone verification, validation, or release control.
 
 ## Authoring Sequence
 
@@ -12,9 +12,10 @@ Write the document in this order:
 2. Fill Document Control, section 0, and Layer 1 before drafting work packages.
 3. Fill the change surface inventory before assigning work packages.
 4. After inventorying change surfaces, identify the core value proposition, critical path hypothesis, top unknowns, first proving slice, and sequencing strategy before assigning work packages.
-5. Fill controls before validation, so validation proves the risky claims instead of only confirming happy paths.
-6. Fill rollout, rollback, observability, and handoff before requesting review.
-7. Complete the traceability matrix and final execution gate last.
+5. Define milestone gates and their manual verification guides before filling controls or validation.
+6. Fill controls before validation, so validation proves the risky claims instead of only confirming happy paths.
+7. Fill rollout, rollback, observability, and handoff before requesting review.
+8. Complete the traceability matrix and final execution gate last.
 
 Do not use work packages to smuggle in new product, design, or operational decisions. If execution reveals a missing decision, record a `Q-*` question or `DEV-*` deviation and escalate it.
 
@@ -52,6 +53,7 @@ Assign stable IDs before review and do not renumber casually after review starts
 - `OBJ-*` and `NG-*` define execution outcomes and exclusions.
 - `SURF-*` identifies change surfaces.
 - `WP-*` identifies owned work packages.
+- `MS-*` identifies milestone gates that require human verification and approval.
 - `CTRL-*` identifies execution safeguards.
 - `VAL-*` identifies validation activities.
 - `REV-*` identifies review checks.
@@ -61,6 +63,19 @@ Assign stable IDs before review and do not renumber casually after review starts
 - `RISK-*`, `Q-*`, `DEV-*`, and `WVR-*` identify risk, unresolved questions, approved execution deviations, and approved review waivers.
 
 Use `VAL-*` for proof activities. Use `EVD-*` for the evidence artifacts those activities produce.
+
+Use `MS-*` for hard approval gates. Each milestone shall name the covered work, human verifier, prerequisite evidence, step-by-step manual verification guide, approval decision, and failure path.
+
+## Milestone Drafting Rules
+
+Treat milestones as operator-verifiable checkpoints, not schedule labels.
+
+- Write the milestone around the functionality or operational capability being approved.
+- Link each milestone to the `WP-*`, `VAL-*`, `REV-*`, and `EVD-*` rows that prove it.
+- Include manual verification steps that a human operator can execute without hidden context.
+- Cover the full functionality encapsulated by the milestone; excluded behavior requires an explicit `N/A` rationale.
+- Record what evidence the verifier must capture and what decision phrase marks approval, rejection, or conditional approval.
+- Define the failure path before execution so a failed milestone cannot silently become drift.
 
 ## E1 Bounded Change Drafting Rules
 
@@ -76,8 +91,10 @@ For `E1`, keep the artifact short but explicit:
 Before requesting review, the author shall be able to answer `yes` to each question:
 
 - Does every work package trace to approved source authority?
+- Does every work package map to a milestone gate with human verification?
 - Does every writable surface have an owner and review expectation?
 - Can another engineer execute the sequence without asking for hidden context?
+- Can the named verifier execute each milestone guide step-by-step and capture evidence?
 - Does validation prove the highest-risk claims?
 - Is rollback or containment executable by a named role?
 - Are unresolved questions either non-blocking or represented in the final gate?
@@ -85,4 +102,4 @@ Before requesting review, the author shall be able to answer `yes` to each quest
 
 ## Review Handoff
 
-Send reviewers the execution spec, source design or ticket, branch or diff if available, test evidence already produced, and any deviations from the plan. State the requested decision exactly as one of the allowed decision phrases in section 0.
+Send reviewers the execution spec, source design or ticket, branch or diff if available, milestone evidence already produced, test evidence already produced, and any deviations from the plan. State the requested decision exactly as one of the allowed decision phrases in section 0.

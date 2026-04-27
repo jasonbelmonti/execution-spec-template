@@ -80,6 +80,11 @@ These findings are not waivable:
 - Missing validation for the highest-risk claim.
 - Missing rollback or containment for work that affects live systems.
 - Broken traceability for a critical objective, work package, or high-risk surface.
+- Missing, insufficient, or unapproved milestone gate.
+- Missing manual verification guide, named human verifier, milestone approval evidence, or milestone failure path.
+- Broken milestone traceability between covered work, validation, review, approval, or evidence.
+
+Section 7 milestone approval requirements are hard gates. They shall not be satisfied by `Deferred` status or by a `WVR-*` waiver.
 
 All other `Blocker` or `Major` findings may be waived only when the process or template permits `Deferred` treatment, the gap is bounded, the compensating control is explicit, and the final verdict records the `WVR-*` identifier.
 
@@ -151,15 +156,16 @@ Evaluate every section against five quality dimensions:
 | 4. Constraints, Assumptions, and Dependencies | Are blockers and assumptions visible and managed? |  |  |
 | 5. Change Surface Inventory | Are all touched systems and review surfaces identified? |  |  |
 | 6. Work Packages and Sequencing | Can the work be executed in the stated order? |  |  |
-| 7. Execution Controls and Drift Management | Will the team detect unsafe scope or design drift? |  |  |
-| 8. Data, Schema, Config, and Contract Handling | Are compatibility and reversibility impacts explicit? |  |  |
-| 9. Validation and Evidence Plan | Does validation prove completion and risky claims? |  |  |
-| 10. Review Plan | Are required reviewers and approval conditions explicit? |  |  |
-| 11. Rollout, Migration, Rollback, and Recovery | Can the change be deployed and recovered safely? |  |  |
-| 12. Observability and Operational Readiness | Can operators detect and respond to failure? |  |  |
-| 13. Risks, Questions, Deviations, and Waivers | Are risks, unknowns, deviations, and waivers honestly represented? |  |  |
-| 14. Execution Traceability Matrix | Is the chain from source to evidence intact? |  |  |
-| 15. Final Execution Gate | Are entry, completion, release, and handoff gates evidence-based? |  |  |
+| 7. Milestone Gates and Manual Verification | Are human approval gates evidence-based and operator-verifiable? |  |  |
+| 8. Execution Controls and Drift Management | Will the team detect unsafe scope or design drift? |  |  |
+| 9. Data, Schema, Config, and Contract Handling | Are compatibility and reversibility impacts explicit? |  |  |
+| 10. Validation and Evidence Plan | Does validation prove completion and risky claims? |  |  |
+| 11. Review Plan | Are required reviewers and approval conditions explicit? |  |  |
+| 12. Rollout, Migration, Rollback, and Recovery | Can the change be deployed and recovered safely? |  |  |
+| 13. Observability and Operational Readiness | Can operators detect and respond to failure? |  |  |
+| 14. Risks, Questions, Deviations, and Waivers | Are risks, unknowns, deviations, and waivers honestly represented? |  |  |
+| 15. Execution Traceability Matrix | Is the chain from source to milestone approval and evidence intact? |  |  |
+| 16. Final Execution Gate | Are entry, milestone, completion, release, and handoff gates evidence-based? |  |  |
 
 ### Structural Blocking Conditions
 
@@ -168,11 +174,12 @@ Stop the review if any of the following are true:
 - Any required section is `Incomplete`.
 - Source authority is absent or insufficient.
 - Work packages do not cover the stated objectives.
+- Milestone gates are absent, lack manual verification steps, or do not require human approval evidence.
 - Writable change surfaces lack owners or review expectations.
 - Validation does not cover the highest-risk claim.
 - Rollout or rollback is absent for work that can affect live systems.
 - A blocking dependency is missing from the final gate.
-- The traceability chain from source to evidence is visibly broken.
+- The traceability chain from source to milestone approval and evidence is visibly broken.
 
 ### Structural Output
 
@@ -200,6 +207,7 @@ Score each dimension from `0` to `3`:
 | Authority fitness | Is the source decision sufficient for execution? |
 | Scope control | Are inclusions, exclusions, and escalation rules clear? |
 | Sequence adequacy | Are work packages ordered to prove the critical path early, retire the highest-risk unknowns, and produce validation evidence at each step? |
+| Milestone adequacy | Do milestone gates require human verification, cover their full functionality, and link to evidence, review, and failure paths? |
 | Surface coverage | Are all changed systems, files, data, configs, and contracts represented? |
 | Validation adequacy | Does evidence prove the outcome and risky claims? |
 | Review adequacy | Are the right reviewers assigned to the right surfaces? |
@@ -212,6 +220,7 @@ Return the document for rework if any of the following are true:
 - Executors would need to make unapproved design, product, or operational decisions.
 - The sequence creates avoidable integration or deployment hazards.
 - The sequence is primarily component-layer order and does not identify a first proving slice or validation checkpoint.
+- A required milestone lacks a named human verifier, manual verification guide, required evidence, approval decision, or failure path.
 - Critical surfaces are omitted from review or validation.
 - The validation plan could pass while the approved outcome remains unmet.
 - The rollback or recovery plan is unsafe for the execution level.
@@ -221,7 +230,7 @@ Return the document for rework if any of the following are true:
 | Execution level | Minimum acceptable posture |
 | --- | --- |
 | `E0` | No dimension may score `0`; `Authority fitness`, `Scope control`, and `Validation adequacy` shall score at least `2` |
-| `E1` | No dimension may score `0`; `Authority fitness`, `Sequence adequacy`, `Validation adequacy`, and `Review adequacy` shall score at least `2` |
+| `E1` | No dimension may score `0`; `Authority fitness`, `Sequence adequacy`, `Milestone adequacy`, `Validation adequacy`, and `Review adequacy` shall score at least `2` |
 | `E2` | No dimension may score `0`; all dimensions shall score at least `2` |
 | `E3` | No dimension may score below `2`; `Validation adequacy`, `Review adequacy`, and `Operational safety` should normally score `3` |
 
@@ -236,6 +245,7 @@ Return the document for rework if any of the following are true:
 | Authority fitness |  |  |
 | Scope control |  |  |
 | Sequence adequacy |  |  |
+| Milestone adequacy |  |  |
 | Surface coverage |  |  |
 | Validation adequacy |  |  |
 | Review adequacy |  |  |
@@ -249,10 +259,12 @@ Traceability review confirms that the plan forms an unbroken execution chain.
 
 - Does every `SRC-*` map to at least one `OBJ-*` or `WP-*`?
 - Does every `OBJ-*` map to one or more `WP-*` rows?
-- Does every writable `SURF-*` map to one or more `WP-*`, `REV-*`, and `VAL-*` rows?
+- Does every writable `SURF-*` map to one or more `WP-*`, `MS-*`, `REV-*`, and `VAL-*` rows?
 - Does every `WP-*` have validation evidence?
+- Does every `WP-*` map to a milestone gate?
+- Does every `MS-*` map to covered work, manual verification steps, validation evidence, review, and an approval record?
 - Does every high-risk `RISK-*` map to a control, validation item, release action, or observability signal?
-- Does every blocking dependency appear in the final execution gate?
+- Does every blocking dependency and milestone appear in the final execution gate?
 
 ### Traceability Blocking Conditions
 
@@ -260,9 +272,11 @@ Return the document for rework if:
 
 - Any objective has no work package.
 - Any work package has no validation path.
+- Any work package has no milestone gate.
+- Any milestone has no manual verification path, evidence path, review path, or approval path.
 - Any high-risk surface lacks review coverage.
 - Any release action lacks rollback, containment, or `N/A` rationale.
-- The chain from source authority to completion evidence cannot be followed by an independent reviewer.
+- The chain from source authority to milestone approval and completion evidence cannot be followed by an independent reviewer.
 
 ### Traceability Output
 
@@ -310,9 +324,10 @@ Valid verdicts:
 | Source authority result |  |
 | Structural result |  |
 | Viability result |  |
+| Milestone gate result |  |
 | Traceability result |  |
 | Final verdict |  |
 
 ## Operating Rule
 
-Do not approve execution because the task sounds small. Approve only when source authority, scope control, sequencing, validation, review, and recovery are strong enough for the selected execution level.
+Do not approve execution because the task sounds small. Approve only when source authority, scope control, sequencing, milestone verification, validation, review, and recovery are strong enough for the selected execution level.
