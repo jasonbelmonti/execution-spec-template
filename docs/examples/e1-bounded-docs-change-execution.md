@@ -130,11 +130,11 @@ Deferred completeness: Skill packaging, additional examples, and publication dec
 
 Execution sequence: Complete WP-1 first, then use its evidence to complete WP-2, then complete WP-3 and inspect headings, traceability, and Git status.
 
-Parallelization rules: No parallel authorship is required for this bounded first draft. WP-2 and WP-3 may be split across implementers only after WP-1 proves the bounded flow and section contracts are stable.
+Parallelization rules: No parallel authorship is required for this bounded first draft. WP-2 and WP-3 may be split across implementers only after WP-1 proves the bounded flow and section contracts are stable, and only if the shared editable paths are either serialized or assigned to one owner at a time.
 
 Integration points: The example shall use section names and identifiers from the template.
 
-Coordination triggers: None; one executor owns all documentation edits.
+Coordination triggers: If WP-2 and WP-3 are split across implementers, edits to `docs/execution-spec-authoring-guide.md` and `docs/execution-spec-review-process.md` require a named handoff point before WP-3 begins tightening those files, or those files shall remain editable by only one implementer while the other implementer treats them as read-only.
 
 Section status: Complete
 

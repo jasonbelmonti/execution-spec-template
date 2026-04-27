@@ -191,12 +191,13 @@ Execution viability asks whether the plan would complete safely if followed exac
 
 ### Viability Dimensions
 
-Score each dimension from `0` to `3`:
+Score each applicable dimension from `0` to `3`. Use `N/A` only when the corresponding template section is explicitly marked `N/A` with rationale.
 
 - `0`: absent or invalid
 - `1`: weak; major doubt remains
 - `2`: adequate; review can proceed with follow-up
 - `3`: strong; well-supported and internally consistent
+- `N/A`: not applicable because the corresponding template section is explicitly `N/A` with rationale; exclude from minimum numeric score thresholds
 
 | Dimension | Review question |
 | --- | --- |
@@ -225,10 +226,10 @@ Return the document for rework if any of the following are true:
 
 | Execution level | Minimum acceptable posture |
 | --- | --- |
-| `E0` | No dimension may score `0`; `Authority fitness`, `Scope control`, and `Validation adequacy` shall score at least `2` |
-| `E1` | No dimension may score `0`; `Authority fitness`, `Sequence adequacy`, `Validation adequacy`, and `Review adequacy` shall score at least `2`; `Package boundary adequacy` shall score at least `2` when section 6 applies |
-| `E2` | No dimension may score `0`; all dimensions shall score at least `2` |
-| `E3` | No dimension may score below `2`; `Validation adequacy`, `Review adequacy`, and `Operational safety` should normally score `3` |
+| `E0` | No applicable dimension may score `0`; `Authority fitness`, `Scope control`, and `Validation adequacy` shall score at least `2` |
+| `E1` | No applicable dimension may score `0`; `Authority fitness`, `Sequence adequacy`, `Validation adequacy`, and `Review adequacy` shall score at least `2`; `Package boundary adequacy` shall score at least `2` when section 6 applies |
+| `E2` | No applicable dimension may score `0`; all applicable dimensions shall score at least `2`; `Package boundary adequacy` shall score at least `2` when section 6 applies |
+| `E3` | No applicable dimension may score below `2`; `Validation adequacy`, `Review adequacy`, and `Operational safety` should normally score `3`; `Package boundary adequacy` shall score at least `2` when section 6 applies |
 
 ### Viability Output
 
