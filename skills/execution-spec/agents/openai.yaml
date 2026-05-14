@@ -1,0 +1,7 @@
+interface:
+  display_name: "Execution Spec"
+  short_description: "Author and review execution specs"
+  default_prompt: "Use $execution-spec to draft an execution spec for this implementation proposal."
+
+policy:
+  allow_implicit_invocation: true
