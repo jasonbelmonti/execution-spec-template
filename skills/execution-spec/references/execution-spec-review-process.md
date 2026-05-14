@@ -1,6 +1,6 @@
 # Execution Specification Review Process
 
-Author-facing drafting guidance lives in `docs/execution-spec-authoring-guide.md`. This document is the reviewer and decision-owner procedure.
+Author-facing drafting guidance lives in `references/execution-spec-authoring-guide.md`. This document is the reviewer and decision-owner procedure.
 
 ## Purpose
 

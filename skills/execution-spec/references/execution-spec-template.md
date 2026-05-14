@@ -1,6 +1,6 @@
 # Execution Specification Template
 
-Authoring guidance lives in `docs/execution-spec-authoring-guide.md`. Review procedure lives in `docs/execution-spec-review-process.md`.
+Authoring guidance lives in `references/execution-spec-authoring-guide.md`. Review procedure lives in `references/execution-spec-review-process.md`.
 
 ## Purpose
 
