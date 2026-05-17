@@ -19,7 +19,7 @@ Use this skill in one mode per task:
 
 Load only the references needed for the current mode:
 
-- Author or revise: read `references/execution-spec-template.md` and `references/execution-spec-authoring-guide.md`.
+- Author or revise: read `references/execution-spec-template.md` and `references/execution-spec-authoring-guide.md`, then use `references/execution-spec-validation-profile.yaml` only for the final baseline structural validation pass.
 - Review: read `references/execution-spec-review-process.md` and the relevant template sections in `references/execution-spec-template.md`.
 - Example calibration: read `references/examples/e1-bounded-docs-change-execution.md` when a concrete bounded-change example would reduce ambiguity.
 
@@ -39,6 +39,14 @@ Load only the references needed for the current mode:
 - Convert ambiguous ownership, overlapping editable paths, or bidirectional dependencies into explicit coordination triggers or package redesign.
 - Reject specs organized only by component-layer order, such as `schema -> API -> service -> UI -> tests`, unless each step proves incremental value, retires a risk, and has decision-grade validation.
 - Do not leave placeholder text, empty sections, or unresolved unknowns unless the template explicitly allows an `unknown` with owner, impact, and decision gate.
+- For authored or revised execution specs, run baseline deterministic Markdown validation before the final response:
+  - Use `references/execution-spec-validation-profile.yaml`.
+  - If the execution spec already exists as a Markdown file, validate that file.
+  - If the spec exists only in the response draft, write the revised Markdown to a temporary file and validate the temporary file.
+  - Prefer `markdown-engine validate --file <spec.md> --profile <skill-dir>/references/execution-spec-validation-profile.yaml --format json`.
+  - If `markdown-engine` is unavailable, try `npx --yes @jasonbelmonti/markdown-engine validate --file <spec.md> --profile <profile.yaml> --format json`.
+  - Treat validation failures as structural findings. Fix deterministic structural failures before returning when possible. If validation cannot run or a validation failure remains, state that explicitly in the output.
+  - Treat validation success as a baseline structural pass, not execution approval. Continue review for conditional template paths, package boundary adequacy, milestone semantics, source authority, value/risk sequencing, operational safety, and semantic traceability.
 
 ## Output Shape
 

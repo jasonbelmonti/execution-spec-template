@@ -1,0 +1,840 @@
+# Baseline deterministic profile for markdown-engine.validation@v1.
+# This profile only includes rules the current engine can enforce without
+# template-specific false positives. Conditional table-or-none paths,
+# optional package decomposition, rollout, observability, data handling,
+# and semantic milestone adequacy remain review responsibilities until
+# markdown-engine supports those grammar features.
+syntaxVersion: markdown-engine.validation@v1
+documentVersion: 1.0.0
+rules:
+  - id: document-control.table.columns
+    select:
+      target: table
+      section: Document Control
+      header:
+        - Field
+        - Value
+    assert:
+      tableColumnsRequired:
+        columns:
+          - Field
+          - Value
+
+  - id: sections.required
+    select:
+      target: document
+    assert:
+      sectionsRequired:
+        order: strict
+        headings:
+          - Document Control
+          - 0. Execution Summary
+          - "Layer 1: Execution Basis"
+          - 1. Source Authority and Scope
+          - 2. Objectives and Non-Objectives
+          - 3. Ownership, Roles, and Decision Points
+          - 4. Constraints, Assumptions, and Dependencies
+          - "Layer 2: Execution Plan"
+          - 5. Evidence-Led Execution Model
+          - 6. Change Surface Inventory
+          - 7. Agent-Focused Package Decomposition
+          - 8. Work Packages and Sequencing
+          - 9. Milestone Gates and Manual Verification
+          - 10. Execution Controls and Drift Management
+          - 11. Data, Schema, Config, and Contract Handling
+          - "Layer 3: Validation, Release, and Handoff"
+          - 12. Validation and Evidence Plan
+          - 13. Review Plan
+          - 14. Rollout, Migration, Rollback, and Recovery
+          - 15. Observability and Operational Readiness
+          - 16. Risks, Questions, Deviations, and Waivers
+          - 17. Execution Traceability Matrix
+          - 18. Final Execution Gate
+
+  - id: section.status.0
+    select:
+      target: textSpan
+      section: 0. Execution Summary
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.1
+    select:
+      target: textSpan
+      section: 1. Source Authority and Scope
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.2
+    select:
+      target: textSpan
+      section: 2. Objectives and Non-Objectives
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.3
+    select:
+      target: textSpan
+      section: 3. Ownership, Roles, and Decision Points
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.4
+    select:
+      target: textSpan
+      section: 4. Constraints, Assumptions, and Dependencies
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.5
+    select:
+      target: textSpan
+      section: 5. Evidence-Led Execution Model
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.6
+    select:
+      target: textSpan
+      section: 6. Change Surface Inventory
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.7
+    select:
+      target: textSpan
+      section: 7. Agent-Focused Package Decomposition
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.8
+    select:
+      target: textSpan
+      section: 8. Work Packages and Sequencing
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.9
+    select:
+      target: textSpan
+      section: 9. Milestone Gates and Manual Verification
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.10
+    select:
+      target: textSpan
+      section: 10. Execution Controls and Drift Management
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.11
+    select:
+      target: textSpan
+      section: 11. Data, Schema, Config, and Contract Handling
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.12
+    select:
+      target: textSpan
+      section: 12. Validation and Evidence Plan
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.13
+    select:
+      target: textSpan
+      section: 13. Review Plan
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.14
+    select:
+      target: textSpan
+      section: 14. Rollout, Migration, Rollback, and Recovery
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.15
+    select:
+      target: textSpan
+      section: 15. Observability and Operational Readiness
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.16
+    select:
+      target: textSpan
+      section: 16. Risks, Questions, Deviations, and Waivers
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.17
+    select:
+      target: textSpan
+      section: 17. Execution Traceability Matrix
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: section.status.18
+    select:
+      target: textSpan
+      section: 18. Final Execution Gate
+      textIncludes: "Section status:"
+    assert:
+      text:
+        contains: "Section status:"
+
+  - id: execution-summary.fields.present
+    select:
+      target: textSpan
+      section: 0. Execution Summary
+      textIncludes: "Decision requested:"
+    assert:
+      text:
+        contains: "Decision requested:"
+
+  - id: source-authority.table.columns
+    select:
+      target: table
+      section: 1. Source Authority and Scope
+      header:
+        - ID
+        - Source
+        - Authority
+        - Execution implication
+    assert:
+      tableColumnsRequired:
+        columns:
+          - ID
+          - Source
+          - Authority
+          - Execution implication
+
+  - id: source.ids.unique
+    select:
+      target: tableCell
+      section: 1. Source Authority and Scope
+      tableHeader:
+        - ID
+        - Source
+        - Authority
+      column: ID
+    assert:
+      ids:
+        prefix: SRC
+        unique: true
+
+  - id: objectives.table.columns
+    select:
+      target: table
+      section: 2. Objectives and Non-Objectives
+      header:
+        - ID
+        - Statement
+        - Completion horizon
+        - Evidence
+    assert:
+      tableColumnsRequired:
+        columns:
+          - ID
+          - Statement
+          - Completion horizon
+          - Evidence
+
+  - id: objective.ids.unique
+    select:
+      target: tableCell
+      section: 2. Objectives and Non-Objectives
+      tableHeader:
+        - ID
+        - Statement
+        - Completion horizon
+      column: ID
+    assert:
+      ids:
+        prefix: OBJ
+        unique: true
+
+  - id: nonobjective.ids.unique
+    select:
+      target: tableCell
+      section: 2. Objectives and Non-Objectives
+      tableHeader:
+        - ID
+        - Statement
+        - Completion horizon
+      column: ID
+    assert:
+      ids:
+        prefix: NG
+        unique: true
+
+  - id: roles.table.columns
+    select:
+      target: table
+      section: 3. Ownership, Roles, and Decision Points
+      header:
+        - Role or person
+        - Responsibility
+        - Required action
+    assert:
+      tableColumnsRequired:
+        columns:
+          - Role or person
+          - Responsibility
+          - Required action
+
+  - id: constraints.table.columns
+    select:
+      target: table
+      section: 4. Constraints, Assumptions, and Dependencies
+      header:
+        - ID
+        - Type
+        - Statement
+        - Owner
+        - "Blocking?"
+        - Validation or resolution plan
+    assert:
+      tableColumnsRequired:
+        columns:
+          - ID
+          - Type
+          - Statement
+          - Owner
+          - "Blocking?"
+          - Validation or resolution plan
+
+  - id: constraint.ids.unique
+    select:
+      target: tableCell
+      section: 4. Constraints, Assumptions, and Dependencies
+      tableHeader:
+        - ID
+        - Type
+        - Statement
+      column: ID
+    assert:
+      ids:
+        prefix: CON
+        unique: true
+
+  - id: assumption.ids.unique
+    select:
+      target: tableCell
+      section: 4. Constraints, Assumptions, and Dependencies
+      tableHeader:
+        - ID
+        - Type
+        - Statement
+      column: ID
+    assert:
+      ids:
+        prefix: ASM
+        unique: true
+
+  - id: dependency.ids.unique
+    select:
+      target: tableCell
+      section: 4. Constraints, Assumptions, and Dependencies
+      tableHeader:
+        - ID
+        - Type
+        - Statement
+      column: ID
+    assert:
+      ids:
+        prefix: DEP
+        unique: true
+
+  - id: evidence-led.fields.present
+    select:
+      target: textSpan
+      section: 5. Evidence-Led Execution Model
+      textIncludes: "Observable outcome:"
+    assert:
+      text:
+        contains: "Observable outcome:"
+
+  - id: work-packages.table.columns
+    select:
+      target: table
+      section: 8. Work Packages and Sequencing
+      header:
+        - ID
+        - Objective
+        - Owner
+        - Package boundary
+        - Editable paths
+        - Read-only paths
+        - Inputs
+        - Outputs
+        - Dependencies
+        - Observable value enabled
+        - Risk retired
+        - Milestone gate
+        - Validation checkpoint
+        - Completion criteria
+    assert:
+      tableColumnsRequired:
+        columns:
+          - ID
+          - Objective
+          - Owner
+          - Package boundary
+          - Editable paths
+          - Read-only paths
+          - Inputs
+          - Outputs
+          - Dependencies
+          - Observable value enabled
+          - Risk retired
+          - Milestone gate
+          - Validation checkpoint
+          - Completion criteria
+
+  - id: work-package.ids.unique
+    select:
+      target: tableCell
+      section: 8. Work Packages and Sequencing
+      tableHeader:
+        - ID
+        - Objective
+        - Owner
+      column: ID
+    assert:
+      ids:
+        prefix: WP
+        unique: true
+
+  - id: work-package.milestone.links
+    select:
+      target: tableCell
+      section: 8. Work Packages and Sequencing
+      tableHeader:
+        - ID
+        - Objective
+        - Owner
+        - Package boundary
+        - Editable paths
+        - Read-only paths
+        - Inputs
+        - Outputs
+        - Dependencies
+        - Observable value enabled
+        - Risk retired
+        - Milestone gate
+      column: Milestone gate
+    assert:
+      text:
+        contains: MS-
+
+  - id: work-package.validation.links
+    select:
+      target: tableCell
+      section: 8. Work Packages and Sequencing
+      tableHeader:
+        - ID
+        - Objective
+        - Owner
+        - Package boundary
+        - Editable paths
+        - Read-only paths
+        - Inputs
+        - Outputs
+        - Dependencies
+        - Observable value enabled
+        - Risk retired
+        - Milestone gate
+        - Validation checkpoint
+      column: Validation checkpoint
+    assert:
+      text:
+        contains: VAL-
+
+  - id: work-package.fields.present
+    select:
+      target: textSpan
+      section: 8. Work Packages and Sequencing
+      textIncludes: "Planning strategy:"
+    assert:
+      text:
+        contains: "Planning strategy:"
+
+  - id: milestones.table.columns
+    select:
+      target: table
+      section: 9. Milestone Gates and Manual Verification
+      header:
+        - ID
+        - Gate objective
+        - Covered work
+        - Due point
+        - Human verifier
+        - Prerequisites
+        - Review gate
+        - Required evidence
+        - Approval decision
+        - Failure path
+    assert:
+      tableColumnsRequired:
+        columns:
+          - ID
+          - Gate objective
+          - Covered work
+          - Due point
+          - Human verifier
+          - Prerequisites
+          - Review gate
+          - Required evidence
+          - Approval decision
+          - Failure path
+
+  - id: milestone.ids.unique
+    select:
+      target: tableCell
+      section: 9. Milestone Gates and Manual Verification
+      tableHeader:
+        - ID
+        - Gate objective
+        - Covered work
+      column: ID
+    assert:
+      ids:
+        prefix: MS
+        unique: true
+
+  - id: milestone.validation.links
+    select:
+      target: tableCell
+      section: 9. Milestone Gates and Manual Verification
+      tableHeader:
+        - ID
+        - Gate objective
+        - Covered work
+        - Due point
+        - Human verifier
+        - Prerequisites
+      column: Prerequisites
+    assert:
+      text:
+        contains: VAL-
+
+  - id: milestone.review.links
+    select:
+      target: tableCell
+      section: 9. Milestone Gates and Manual Verification
+      tableHeader:
+        - ID
+        - Gate objective
+        - Covered work
+        - Due point
+        - Human verifier
+        - Prerequisites
+        - Review gate
+      column: Review gate
+    assert:
+      text:
+        contains: REV-
+
+  - id: milestone.evidence.links
+    select:
+      target: tableCell
+      section: 9. Milestone Gates and Manual Verification
+      tableHeader:
+        - ID
+        - Gate objective
+        - Covered work
+        - Due point
+        - Human verifier
+        - Prerequisites
+        - Review gate
+        - Required evidence
+      column: Required evidence
+    assert:
+      text:
+        contains: EVD-
+
+  - id: manual-verification.table.columns
+    select:
+      target: table
+      section: 9. Milestone Gates and Manual Verification
+      header:
+        - Step ID
+        - Milestone
+        - Operator action
+        - Expected result
+        - Evidence artifact
+    assert:
+      tableColumnsRequired:
+        columns:
+          - Step ID
+          - Milestone
+          - Operator action
+          - Expected result
+          - Evidence artifact
+
+  - id: controls.table.columns
+    select:
+      target: table
+      section: 10. Execution Controls and Drift Management
+      header:
+        - ID
+        - Trigger
+        - Required action
+        - Owner
+        - Evidence
+    assert:
+      tableColumnsRequired:
+        columns:
+          - ID
+          - Trigger
+          - Required action
+          - Owner
+          - Evidence
+
+  - id: control.ids.unique
+    select:
+      target: tableCell
+      section: 10. Execution Controls and Drift Management
+      tableHeader:
+        - ID
+        - Trigger
+        - Required action
+      column: ID
+    assert:
+      ids:
+        prefix: CTRL
+        unique: true
+
+  - id: validation.table.columns
+    select:
+      target: table
+      section: 12. Validation and Evidence Plan
+      header:
+        - ID
+        - Method
+        - Claim verified
+        - Timing
+        - Owner
+        - Evidence artifact
+    assert:
+      tableColumnsRequired:
+        columns:
+          - ID
+          - Method
+          - Claim verified
+          - Timing
+          - Owner
+          - Evidence artifact
+
+  - id: validation.ids.unique
+    select:
+      target: tableCell
+      section: 12. Validation and Evidence Plan
+      tableHeader:
+        - ID
+        - Method
+        - Claim verified
+      column: ID
+    assert:
+      ids:
+        prefix: VAL
+        unique: true
+
+  - id: validation.evidence.links
+    select:
+      target: tableCell
+      section: 12. Validation and Evidence Plan
+      tableHeader:
+        - ID
+        - Method
+        - Claim verified
+        - Timing
+        - Owner
+        - Evidence artifact
+      column: Evidence artifact
+    assert:
+      text:
+        contains: EVD-
+
+  - id: review.table.columns
+    select:
+      target: table
+      section: 13. Review Plan
+      header:
+        - ID
+        - Reviewer
+        - Review scope
+        - "Blocking?"
+        - Completion evidence
+    assert:
+      tableColumnsRequired:
+        columns:
+          - ID
+          - Reviewer
+          - Review scope
+          - "Blocking?"
+          - Completion evidence
+
+  - id: review.ids.unique
+    select:
+      target: tableCell
+      section: 13. Review Plan
+      tableHeader:
+        - ID
+        - Reviewer
+        - Review scope
+      column: ID
+    assert:
+      ids:
+        prefix: REV
+        unique: true
+
+  - id: traceability.table.columns
+    select:
+      target: table
+      section: 17. Execution Traceability Matrix
+      header:
+        - Source, objective, or evidence-led claim
+        - Change surfaces
+        - Package boundaries
+        - Work packages
+        - Milestones
+        - Controls
+        - Validation
+        - Review
+        - Release or ops
+        - Evidence
+    assert:
+      tableColumnsRequired:
+        columns:
+          - Source, objective, or evidence-led claim
+          - Change surfaces
+          - Package boundaries
+          - Work packages
+          - Milestones
+          - Controls
+          - Validation
+          - Review
+          - Release or ops
+          - Evidence
+
+  - id: source.traceability.matrix
+    select:
+      target: document
+    assert:
+      references:
+        idsFrom:
+          section: 1. Source Authority and Scope
+          column: ID
+          prefix: SRC
+        mustAppearIn:
+          - 17. Execution Traceability Matrix
+
+  - id: objective.traceability.matrix
+    select:
+      target: document
+    assert:
+      references:
+        idsFrom:
+          section: 2. Objectives and Non-Objectives
+          column: ID
+          prefix: OBJ
+        mustAppearIn:
+          - 17. Execution Traceability Matrix
+
+  - id: work-package.traceability.matrix
+    select:
+      target: document
+    assert:
+      references:
+        idsFrom:
+          section: 8. Work Packages and Sequencing
+          column: ID
+          prefix: WP
+        mustAppearIn:
+          - 17. Execution Traceability Matrix
+
+  - id: milestone.traceability.matrix
+    select:
+      target: document
+    assert:
+      references:
+        idsFrom:
+          section: 9. Milestone Gates and Manual Verification
+          column: ID
+          prefix: MS
+        mustAppearIn:
+          - 17. Execution Traceability Matrix
+
+  - id: validation.traceability.matrix
+    select:
+      target: document
+    assert:
+      references:
+        idsFrom:
+          section: 12. Validation and Evidence Plan
+          column: ID
+          prefix: VAL
+        mustAppearIn:
+          - 17. Execution Traceability Matrix
+
+  - id: review.traceability.matrix
+    select:
+      target: document
+    assert:
+      references:
+        idsFrom:
+          section: 13. Review Plan
+          column: ID
+          prefix: REV
+        mustAppearIn:
+          - 17. Execution Traceability Matrix
+
+  - id: final-gate.fields.present
+    select:
+      target: textSpan
+      section: 18. Final Execution Gate
+      textIncludes: "Entry gate:"
+    assert:
+      text:
+        contains: "Entry gate:"
