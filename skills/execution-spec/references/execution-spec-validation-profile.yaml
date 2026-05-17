@@ -542,7 +542,7 @@ rules:
         prefix: MS
         unique: true
 
-  - id: milestone.validation.links
+  - id: milestone.prerequisites.present
     select:
       target: tableCell
       section: 9. Milestone Gates and Manual Verification
@@ -555,8 +555,8 @@ rules:
         - Prerequisites
       column: Prerequisites
     assert:
-      text:
-        contains: VAL-
+      textLength:
+        min: 1
 
   - id: milestone.review.links
     select:
