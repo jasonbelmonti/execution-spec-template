@@ -830,7 +830,7 @@ rules:
         mustAppearIn:
           - 17. Execution Traceability Matrix
 
-  - id: final-gate.fields.present
+  - id: final-gate.entry-gate.present
     select:
       target: textSpan
       section: 18. Final Execution Gate
@@ -838,3 +838,48 @@ rules:
     assert:
       text:
         contains: "Entry gate:"
+
+  - id: final-gate.milestone-approval-gate.present
+    select:
+      target: textSpan
+      section: 18. Final Execution Gate
+      textIncludes: "Milestone approval gate:"
+    assert:
+      text:
+        contains: "Milestone approval gate:"
+
+  - id: final-gate.completion-gate.present
+    select:
+      target: textSpan
+      section: 18. Final Execution Gate
+      textIncludes: "Completion gate:"
+    assert:
+      text:
+        contains: "Completion gate:"
+
+  - id: final-gate.release-gate.present
+    select:
+      target: textSpan
+      section: 18. Final Execution Gate
+      textIncludes: "Release gate:"
+    assert:
+      text:
+        contains: "Release gate:"
+
+  - id: final-gate.handoff-record.present
+    select:
+      target: textSpan
+      section: 18. Final Execution Gate
+      textIncludes: "Handoff record:"
+    assert:
+      text:
+        contains: "Handoff record:"
+
+  - id: final-gate.final-readiness-state.present
+    select:
+      target: textSpan
+      section: 18. Final Execution Gate
+      textIncludes: "Final readiness state:"
+    assert:
+      text:
+        contains: "Final readiness state:"
